@@ -83,8 +83,9 @@ Every value is the same and every column is the same; only the order differs, an
 straight to `expand_manec()`. Reported as bayesnec #361.
 
 The substitution was checked against a set `c()` could combine: `three_par`, two
-equations on `coral_colour`, gives the same weights (0.467 and 0.533) and the
-same EC10 (4.25, 2.79--12.22) by either route.
+equations on `coral_colour`, combined from the same two unit files by both
+routes, gives weights of 0.5487 and 0.4513 and an EC10 of 4.0972
+(2.7831--10.9813) to every digit either way.
 
 Two things `c.bnecfit()` does that this route must therefore do for itself.
 `attach_failed_models()` records an equation that could not be fitted, which is
