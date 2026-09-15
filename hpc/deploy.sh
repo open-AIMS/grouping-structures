@@ -60,7 +60,7 @@ ssh "$HOST" "mkdir -p '$DEST'"
 rsync -a --delete \
   --exclude 'units/' --exclude 'store/' --exclude 'logs/' --exclude 'lib/' \
   --exclude 'stan-cache/' --exclude '.git/' --exclude 'hpc/local.conf' \
-  R analysis hpc .Rprofile README.md "$HOST:$DEST/"
+  R analysis hpc shim .Rprofile README.md CLAUDE.md "$HOST:$DEST/"
 rsync -a --delete .bayesnec-src/ "$HOST:$DEST/bayesnec-src/"
 
 # The image is copied only when the cluster does not already hold the one this
@@ -69,6 +69,25 @@ rsync -a --delete .bayesnec-src/ "$HOST:$DEST/bayesnec-src/"
 # an unchanged definition still produces a different file.
 lock_sha=$(sed -n 's/^sif_sha256: //p' hpc/image.lock)
 remote_sha=$(ssh "$HOST" "sha256sum '$DEST/bayesnec-precompile.sif' 2>/dev/null | cut -d' ' -f1" || true)
+if [ "$remote_sha" != "$lock_sha" ]; then
+  # Look for the same image already on the cluster before copying 700MB across
+  # the network. bayesnec's precompile jobs and the example7 compendium deploy
+  # the same file, and a cluster-side cp of a byte-identical image is seconds
+  # against twenty minutes. Matched by digest, not by path, so an image that
+  # happens to sit there under the right name is still checked.
+  echo "=== looking for the image already on the cluster"
+  found=$(ssh "$HOST" "for f in /export/scratch/\$USER/*/bayesnec-precompile.sif; do
+            [ -f \"\$f\" ] || continue
+            if [ \"\$(sha256sum \"\$f\" | cut -d' ' -f1)\" = '$lock_sha' ]; then
+              echo \"\$f\"; break
+            fi
+          done" || true)
+  if [ -n "$found" ]; then
+    echo "    copying from $found"
+    ssh "$HOST" "cp '$found' '$DEST/bayesnec-precompile.sif'"
+    remote_sha="$lock_sha"
+  fi
+fi
 if [ "$remote_sha" != "$lock_sha" ]; then
   [ -n "$SIF" ] || {
     echo "the cluster does not hold the image hpc/image.lock records, and SIF" >&2
