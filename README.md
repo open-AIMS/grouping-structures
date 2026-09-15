@@ -43,7 +43,7 @@ any sampling starts.
 
 One unit is one equation of one model set, on one level where the call is a
 `bnec_group()` one. That is the finest grain `bayesnec` can be reassembled at:
-`c.bnecfit()` builds a `bayesmanecfit` from separately fitted equations, and a
+`expand_manec()` builds a `bayesmanecfit` from separately fitted equations, and a
 `bayesnecgroupfit` is a list of per-level fits. The 189 units divide as:
 
 | call | units |
@@ -56,6 +56,33 @@ One unit is one equation of one model set, on one level where the call is a
 
 A call that cannot be decomposed runs whole, as one task. It is still fitted in
 parallel with every other call; it simply does not divide further.
+
+## The route back to a model average
+
+`R/assemble.R` reaches `expand_manec()` directly, which is the call `bnec()`
+itself makes, rather than going through the exported `c.bnecfit()`.
+
+`c.bnecfit()` was the obvious route and it does not work here. It runs
+`check_data_equality()`, which compares `as.matrix(fit$data)` between fits with
+`identical()`. `brms` orders those columns by the model formula, and the hormesis
+equations put the predictor before the grouping factor where the others put it
+after: on `fit_pam` the five hormesis equations came back with
+`yield, diuron, chamber` against the other thirteen's `yield, chamber, diuron`.
+Every value is the same and every column is the same; only the order differs, and
+`identical()` is order-sensitive, so the combination was refused. A monolithic
+`bnec()` never meets that check, because it hands its `prebayesnecfit` list
+straight to `expand_manec()`. Reported as bayesnec #361.
+
+The substitution was checked against a set `c()` could combine: `three_par`, two
+equations on `coral_colour`, gives the same weights (0.467 and 0.533) and the
+same EC10 (4.25, 2.79--12.22) by either route.
+
+Two things `c.bnecfit()` does that this route must therefore do for itself.
+`attach_failed_models()` records an equation that could not be fitted, which is
+what `failed_models()` reads. `attach_bnec_record()` records the candidate set as
+requested against the set as attempted; without it an assembled object reports
+whichever unit came first, so a fit whose call said `"all"` would report
+`requested = "ecxll3"`.
 
 ## The scope of an assembled set
 
