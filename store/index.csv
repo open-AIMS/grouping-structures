@@ -1,0 +1,2 @@
+"key","target","fn","chunk","n_units","class","mb","call"
+"209383f92672d34a","three_par","bnec","",2,"bayesmanecfit",67.3,"bnec(proportion ~ crf(diuron, c(""ecxll3"", ""ecxwb1p3"")) + ogl(chamber), data = coral_colour, family = Beta(link = ""identity""), chains = 4, iter = 5000, warmup = 4000, seed = 228, refresh = 0, control = list(adapt_delta = 0.99))"

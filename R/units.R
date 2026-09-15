@@ -154,3 +154,34 @@ run_unit <- function(cl, fn_name, data, env, level = NA, model = NA, plan = NULL
   }
   eval(ucl, uenv)
 }
+
+## The candidate set as requested, as attempted, and what was dropped between.
+##
+## bnec() attaches this to every fit it returns, and bnec_record() is what a
+## methods section reads to state the set as requested against the set as fitted.
+## An assembled object would otherwise carry the record of whichever unit came
+## first, whose request was one equation: a fit whose call said "all" would
+## report `requested = "ecxll3"`, which is not approximately right but wrong.
+##
+## Four internals are used, and they are the ones bnec() itself runs in this
+## order. A parallel implementation of check_models() would be the wrong answer
+## the moment the package changed, and these fail loudly at assembly rather than
+## silently: a rename stops the run.
+model_set_record <- function(formula_expr, data, family_expr, env) {
+  form <- bayesnec::bayesnecformula(eval(formula_expr, env))
+  bdat <- stats::model.frame(form, data = data, run_par_checks = TRUE)
+  link_source <- bayesnec:::family_link_source(family_expr, env = env)
+  fam_args <- if (is.null(family_expr)) {
+    list()
+  } else {
+    list(family = eval(family_expr, env))
+  }
+  family <- bayesnec:::retrieve_valid_family(fam_args, bdat,
+                                             link_source = link_source)
+  requested <- bayesnec:::get_model_from_formula(form)
+  attempted <- suppressMessages(
+    bayesnec:::check_models(requested, family, bdat, record = TRUE))
+  list(requested = as.character(requested),
+       attempted = as.character(attempted),
+       excluded = attr(attempted, "excluded"))
+}

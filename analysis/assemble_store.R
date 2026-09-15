@@ -65,9 +65,17 @@ for (key in names(mf$calls)) {
       bayesnec:::failure_record(rows$model[i], records[[i]]$condition)
     }), rows$model[!ok])
 
+  # The substitutions are the unit's own: every unit is a real bnec() call on
+  # the same data, so check_data() recorded the same substitution in each.
+  subs <- Find(Negate(is.null),
+               lapply(records[ok], function(r) attr(r$fit, "bnec_record")$substitutions))
+
   fit <- if (identical(fn, "bnec")) {
-    bayesnec:::attach_failed_models(
-      assemble_models(stats::setNames(units[ok], rows$model[ok])), failed)
+    rec <- model_set_record(mcl$formula, data, mcl$family, env)
+    bayesnec:::attach_bnec_record(
+      bayesnec:::attach_failed_models(
+        assemble_models(stats::setNames(units[ok], rows$model[ok])), failed),
+      rec$requested, rec$attempted, rec$excluded, subs)
   } else if (identical(fn, "bnec_group")) {
     plan <- group_plan(mcl, data, env)
     level_fits <- lapply(plan$levels, function(lev) {
@@ -75,7 +83,15 @@ for (key in names(mf$calls)) {
       lf <- assemble_models(stats::setNames(units[sel], rows$model[sel]))
       lvl_failed <- failed[rows$model[rows$level == lev & !ok]]
       if (length(lvl_failed)) lf <- bayesnec:::attach_failed_models(lf, lvl_failed)
-      lf
+      # Per level, because bnec_group() fits each level with its own bnec()
+      # call on its own subset, and check_models() can drop different
+      # equations on different levels.
+      sub_data <- data[plan$grp == lev, , drop = FALSE]
+      penv <- new.env(parent = env)
+      assign(".plan_family", plan$family, envir = penv)
+      rec <- model_set_record(mcl$formula, sub_data, quote(.plan_family), penv)
+      bayesnec:::attach_bnec_record(lf, rec$requested, rec$attempted,
+                                    rec$excluded, subs)
     })
     names(level_fits) <- plan$levels
     assemble_group(level_fits, plan, mcl$formula, data, env)
