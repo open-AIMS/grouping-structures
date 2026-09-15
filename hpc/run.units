@@ -1,0 +1,42 @@
+#!/bin/bash
+#SBATCH --job-name=grp-units
+#SBATCH --partition=cpuq
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=12GB
+#SBATCH --time=06:00:00
+#SBATCH --output=logs/grp-%A_%a.log
+
+# One array task = one equation, on one level where the call is a bnec_group()
+# one. This is what the study is for: example8's 189 fits run in sequence are
+# most of a day, and run as 189 tasks they are the wall clock of the slowest one.
+#
+# --cpus-per-task=4: a unit is a single equation, so the four chains are the only
+# parallelism within it and brms runs four by default. Asking for more would
+# leave the extra cores idle, and the throughput that matters comes from the
+# array width rather than from within a task.
+#
+# --mem=12GB is over-provisioning rather than a measurement. On a node where the
+# binding constraint is cores, raising it costs nothing in throughput while
+# removing the risk of an OOM kill part-way through.
+#
+# --time=06:00:00: no unit has been measured yet on this cluster. Six hours is
+# generous for one equation at 4 chains of 5000 iterations, and a unit that
+# exceeds it has gone wrong rather than been slow. Revise this once the first
+# run has reported its timings; run_unit.R records the minutes of every fit.
+#
+# Idempotent: a unit whose file exists is skipped, so a failed or timed-out
+# subset is recovered by resubmitting the same array.
+
+set -euo pipefail
+# Sourced by absolute path, not relative to this file: SLURM runs a copy of the
+# submitted script from its own spool directory, so $BASH_SOURCE does not point
+# into the job directory.
+STUDY="${GRP_STUDY:-/export/scratch/$USER/grouping-structures}"
+source "$STUDY/hpc/job-common.sh"
+
+[ -f "$LIB/.installed" ] || {
+  echo "bayesnec is not installed in $LIB; run hpc/run.install first" >&2; exit 1; }
+
+grp_r analysis/run_unit.R "$SLURM_ARRAY_TASK_ID"

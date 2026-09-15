@@ -1,0 +1,48 @@
+#!/bin/bash
+#SBATCH --job-name=grp-install
+#SBATCH --partition=cpuq
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=16GB
+#SBATCH --time=01:00:00
+#SBATCH --output=logs/grp-install-%j.log
+
+# Install bayesnec, build the manifest, and check the keys. The fitting array
+# runs on a dependency behind this, so nothing is fitted until all three have
+# passed.
+#
+# The manifest is built here rather than on a workstation and deployed, so that
+# it is built against the vignette that was actually copied across and the
+# bayesnec that was actually installed. A manifest built somewhere else is a
+# fourth thing that can drift from the render, and the whole design exists to
+# have exactly one.
+#
+# The key check is the gate. It stands up a store of empty files under the
+# manifest's keys, installs the shim, and runs the vignette's code: every fit
+# call must resolve to a key the manifest planned units for. It takes seconds,
+# and it is the difference between finding a mismatch now and finding it after
+# 189 tasks have sampled.
+
+set -euo pipefail
+STUDY="${GRP_STUDY:-/export/scratch/$USER/grouping-structures}"
+source "$STUDY/hpc/job-common.sh"
+
+echo "=== $(date -Is) installing bayesnec from $SRC"
+[ -d "$SRC" ] || { echo "no bayesnec source at $SRC; deploy it first" >&2; exit 1; }
+rm -rf "$LIB"; mkdir -p "$LIB"
+singularity exec -B "$STUDY":"$STUDY" --pwd "$SRC" "${RENV[@]}" "$SIF" \
+  R CMD INSTALL --library="$LIB" . \
+  || { echo "R CMD INSTALL failed. If a dependency is missing, the image" >&2
+       echo "needs rebuilding in the bayesnec repository." >&2; exit 1; }
+grp_check_bayesnec
+
+echo "=== $(date -Is) building the manifest"
+grp_r analysis/build_manifest.R "$SRC/vignettes/example8.Rmd.orig"
+
+echo "=== $(date -Is) checking that the shim asks for the manifest's keys"
+grp_r analysis/check_keys.R
+
+# Written last, so a task that sees it knows all three steps finished.
+{ sed -n 's/^commit: //p' hpc/bayesnec.lock; date -Is; } > "$LIB/.installed"
+echo "=== $(date -Is) ready: $(tail -n +2 manifest.csv | wc -l) units"

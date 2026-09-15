@@ -1,0 +1,37 @@
+# Local settings for the HPC scripts. Copy to hpc/local.conf, which is
+# gitignored, and edit. Nothing here is committed: an account name, a login node
+# and a path on your own disk are not the repository's business.
+#
+#   cp hpc/local.conf.example hpc/local.conf
+#
+# Every setting can also be given as an environment variable, which takes
+# precedence over this file. The names follow bayesnec's own
+# hpc/local.conf.example and the example7 compendium's, so one set of habits
+# covers all three.
+
+# The cluster, as ssh would take it. Required.
+HOST=you@login-node.example.org
+
+# Where the job directory goes on the cluster. Defaults to
+# /export/scratch/<the account in HOST>/grouping-structures.
+#DEST=/export/scratch/you/grouping-structures
+
+# The container image on this machine, needed only to copy it to the cluster the
+# first time. This study runs inside bayesnec's precompile image, which holds the
+# toolchain and not bayesnec; the job installs bayesnec from the source this
+# repository pins. Build it from the bayesnec repository:
+#
+#   cd ../bayesnec && ./hpc/build.sh
+#
+#SIF=/home/you/tmp/bayesnec-precompile.sif
+
+# A checkout of open-AIMS/bayesnec on this machine, and the ref within it that
+# carries example8. The vignette is still on a branch, so the ref is a branch
+# name and deploy.sh resolves it to a commit and records that in
+# hpc/bayesnec.lock. Once it has merged, pin a tag or a commit here instead.
+#BAYESNEC_REPO=../bayesnec
+#BAYESNEC_REF=issue-6-33-grouping-vignette
+
+# How many array tasks may be resident at once. The study is embarrassingly
+# parallel, so throughput scales with this up to the width of the array.
+#MAX_RESIDENT=60

@@ -1,0 +1,28 @@
+#!/bin/bash
+#SBATCH --job-name=grp-assemble
+#SBATCH --partition=cpuq
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=64GB
+#SBATCH --time=08:00:00
+#SBATCH --output=logs/grp-assemble-%j.log
+#
+# --mem=64GB and eight hours, both for expand_manec() rather than for the
+# combination itself. It builds the averaged prediction grid across every
+# posterior draw of every equation in a set, and the example7 run measured
+# ecx() and nsec() extraction over thirteen equations at more than two hours
+# (bayesnec #306). The largest set here is eighteen equations, and all of them
+# are in memory at once while they are combined.
+#
+# Exits non-zero where a call is short a unit, so a store is never assembled
+# from part of a model set. A set missing an equation is a different model
+# average, and it would be published with nothing to say so.
+
+set -euo pipefail
+STUDY="${GRP_STUDY:-/export/scratch/$USER/grouping-structures}"
+source "$STUDY/hpc/job-common.sh"
+
+grp_r analysis/assemble_store.R
+echo "=== $(date -Is) store:"
+ls -la store/

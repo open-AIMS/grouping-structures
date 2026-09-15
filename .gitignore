@@ -1,0 +1,26 @@
+lib/
+stan-cache/
+.bayesnec-src/
+hpc/local.conf
+*.sif
+*.log
+.Rhistory
+.RData
+.Rproj.user/
+
+# The individual unit fits: 189 of them, and the assembled store beside them is
+# what the render reads. Kept on the cluster and fetched with hpc/fetch-store.sh
+# rather than tracked.
+units/
+
+# The store: nine model-averaged fits, a few hundred megabytes. Reproducible
+# from this code, manifest.rds and hpc/bayesnec.lock, so what tracking it would
+# save is the fitting rather than the record. The index and the provenance stamp
+# beside it are small and are tracked.
+store/*.rds
+
+# Rebuilt by hpc/run.install against the deployed vignette, so a copy committed
+# from a workstation would be a fourth thing that can drift from the render.
+# manifest.csv is tracked as the readable record of the 189 units; the .rds it
+# is written beside is not.
+manifest.rds
