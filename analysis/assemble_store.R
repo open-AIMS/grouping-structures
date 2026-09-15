@@ -52,6 +52,27 @@ for (key in names(mf$calls)) {
                       eval, envir = env)
 
   records <- lapply(paths, readRDS)
+
+  # Every unit of a set must have been fitted by the same backend and the same
+  # bayesnec. Neither is in the key, so the skip in run_unit.R would otherwise
+  # reuse a unit left by a run under different settings, and the set would mix
+  # them with nothing to say so. Stop rather than warn: a mixed set is not a
+  # model average of anything, and deleting the units named here and
+  # resubmitting the array is the whole remedy.
+  seen_backend <- unique(unlist(lapply(records, `[[`, "backend")))
+  seen_version <- unique(unlist(lapply(records, `[[`, "bayesnec")))
+  if (length(seen_backend) > 1L || length(seen_version) > 1L) {
+    stop("units of ", info$target, " disagree:\n",
+         "  backend: ", paste(seen_backend, collapse = ", "), "\n",
+         "  bayesnec: ", paste(seen_version, collapse = ", "), "\n",
+         "  Delete units/", key, "__* and resubmit the array.", call. = FALSE)
+  }
+  if (length(seen_version) && !identical(seen_version, mf$bayesnec)) {
+    stop("units of ", info$target, " were fitted by bayesnec ", seen_version,
+         ", but the manifest was built against ", mf$bayesnec, ".",
+         "\n  Delete units/", key, "__* and resubmit the array.", call. = FALSE)
+  }
+
   units <- lapply(records, `[[`, "fit")
   ok <- !vapply(units, is.null, logical(1L))
   if (any(!ok)) {

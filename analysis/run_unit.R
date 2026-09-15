@@ -87,11 +87,19 @@ fit <- try(run_unit(mcl, fn, data, env, level = row$level, model = row$model,
 elapsed <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
 failed <- inherits(fit, "try-error")
 
+# The backend and the package version are recorded beside the fit, and
+# assemble_store.R refuses a set whose units disagree. They are not in the key,
+# which covers the call and the data, so a unit fitted under a different backend
+# or a different bayesnec would otherwise be reused silently by the skip above.
+# Observed on a workstation on 2026-09-15: an rstan fit from an interrupted first
+# attempt was reused by a cmdstanr run, and the assembled set mixed the two --
+# different weights and a different EC10, with nothing to say so.
 saveRDS(list(fit = if (failed) NULL else fit,
              failed = failed,
              condition = if (failed) attr(fit, "condition") else NULL,
              task = task, key = row$key, level = row$level,
              model = row$model, minutes = elapsed,
+             backend = getOption("brms.backend"),
              bayesnec = as.character(packageVersion("bayesnec"))),
         out)
 if (failed) {
