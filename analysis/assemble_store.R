@@ -43,6 +43,13 @@ for (key in names(mf$calls)) {
   mcl <- match.call(get(fn, envir = asNamespace("bayesnec")), cl,
                     expand.dots = TRUE)
   data <- eval(mcl$data, env)
+  # The arguments expand_manec() takes that the vignette may have set on the
+  # call. Evaluated here rather than passed as expressions because
+  # expand_manec() is reached by do.call().
+  expand_args <- c("x_range", "resolution", "sig_val", "loo_controls")
+  mcl_list <- as.list(mcl)
+  call_args <- lapply(mcl_list[intersect(names(mcl_list), expand_args)],
+                      eval, envir = env)
 
   records <- lapply(paths, readRDS)
   units <- lapply(records, `[[`, "fit")
@@ -74,13 +81,14 @@ for (key in names(mf$calls)) {
     rec <- model_set_record(mcl$formula, data, mcl$family, env)
     bayesnec:::attach_bnec_record(
       bayesnec:::attach_failed_models(
-        assemble_models(stats::setNames(units[ok], rows$model[ok])), failed),
+        assemble_models(stats::setNames(units[ok], rows$model[ok]), call_args),
+        failed),
       rec$requested, rec$attempted, rec$excluded, subs)
   } else if (identical(fn, "bnec_group")) {
     plan <- group_plan(mcl, data, env)
     level_fits <- lapply(plan$levels, function(lev) {
       sel <- rows$level == lev & ok
-      lf <- assemble_models(stats::setNames(units[sel], rows$model[sel]))
+      lf <- assemble_models(stats::setNames(units[sel], rows$model[sel]), call_args)
       lvl_failed <- failed[rows$model[rows$level == lev & !ok]]
       if (length(lvl_failed)) lf <- bayesnec:::attach_failed_models(lf, lvl_failed)
       # Per level, because bnec_group() fits each level with its own bnec()

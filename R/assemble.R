@@ -17,14 +17,55 @@
 ## reproduced between a sequential and a parallel run even with a seed.
 ASSEMBLY_SEED <- 228L
 
-## c.bnecfit() takes every equation at once rather than being folded over them.
-## Reduce() would run expand_manec() once per equation, drawing from the stream
-## each time and doing the averaging work eighteen times to keep the last
-## answer; one call does the averaging once, which is also what bnec() does.
-assemble_models <- function(fits) {
+## The equations are combined through expand_manec(), which is the call bnec()
+## itself makes, rather than through the exported c.bnecfit().
+##
+## c.bnecfit() was the obvious route and it does not work here. It runs
+## check_data_equality(), which compares `as.matrix(fit$data)` between fits with
+## identical(). brms orders the columns of `fit$data` by the model formula, and
+## the hormesis equations put the predictor before the grouping factor where the
+## others put it after: on fit_pam the five hormesis equations came back with
+## `yield, diuron, chamber` against the others' `yield, chamber, diuron`. Every
+## value is the same and every column is the same; only the order differs, and
+## identical() is order-sensitive, so the combination was refused. A monolithic
+## bnec() never meets that check, because it hands its prebayesnecfit list
+## straight to expand_manec(). Reported as a bayesnec issue; doing the same here
+## is both the fix and the closer reproduction of what bnec() does.
+##
+## Folding with Reduce() would be wrong for a second reason: it would run
+## expand_manec() once per equation, drawing from the stream each time and doing
+## the averaging work eighteen times to keep the last answer. One call does the
+## averaging once, which is what bnec() does.
+assemble_models <- function(fits, call_args = list()) {
   stopifnot(length(fits) > 0L)
+  mod_fits <- unlist(lapply(unname(fits), bayesnec:::recover_prebayesnecfit),
+                     recursive = FALSE)
+  mod_fits <- mod_fits[!duplicated(names(mod_fits))]
+  formulas <- lapply(mod_fits, bayesnec:::extract_formula)
+  args <- list(object = mod_fits, formula = formulas)
+  # Forwarded from the vignette's own call where it set them, and left to
+  # expand_manec()'s defaults where it did not -- which is what bnec() passes
+  # when its own defaults are untouched.
+  for (a in c("x_range", "resolution", "sig_val", "loo_controls")) {
+    if (!is.null(call_args[[a]])) args[[a]] <- call_args[[a]]
+  }
   set.seed(ASSEMBLY_SEED)
-  do.call(c, unname(fits))
+  out <- do.call(bayesnec:::expand_manec, args)
+  if (length(out) == 1L) {
+    # bnec() takes this branch too: a set that came down to one equation is a
+    # bayesnecfit, expanded through expand_nec() rather than left as a
+    # one-element model average.
+    nec_args <- list(object = out[[1L]], formula = formulas[[1L]],
+                     model = names(out))
+    for (a in c("x_range", "resolution", "sig_val", "loo_controls")) {
+      if (!is.null(call_args[[a]])) nec_args[[a]] <- call_args[[a]]
+    }
+    out <- do.call(bayesnec:::expand_nec, nec_args)
+    class(out) <- c("bayesnecfit", "bnecfit")
+  } else {
+    class(out) <- c("bayesmanecfit", "bnecfit")
+  }
+  out
 }
 
 ## The order is the order bnec() would have fitted in, which is the order
