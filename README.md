@@ -19,6 +19,15 @@ expects, and writes them to a store. The precompile then reads the store. The
 sampling happens once, on the cluster, and a prose edit is a render rather
 than a day.
 
+Measured on the AIMS HPC on 2026-09-16, against `bayesnec` at `5f98d8d6`, with
+40 tasks resident: the 189 units hold 22.2 hours of fitting between them, and the
+array ran from 01:36 to 02:28 --- 52 minutes. The median unit took 1.3 minutes
+and the slowest 36.2, which is the floor the array width cannot go below. Six
+units failed, all of them `ecxhormebc5`, which is the initial-value problem of
+bayesnec #344 rather than something a re-run fixes; they are recorded as failed
+and their sets averaged over the equations that did fit, which is what `bnec()`
+does with a model it cannot fit. The store is 484 MB.
+
 ## Agreement between the vignette and the store
 
 Nothing here restates any of the vignette's code.
