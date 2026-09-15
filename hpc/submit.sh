@@ -38,7 +38,13 @@ UNITS=$(sbatch --parsable --dependency=afterok:"$INSTALL" \
         --array=1-"$N"%"$MAX_RESIDENT" hpc/run.units)
 echo "units:          $UNITS  ($N tasks, $MAX_RESIDENT resident)"
 
-ASSEMBLE=$(sbatch --parsable --dependency=afterok:"$UNITS" hpc/run.assemble)
+# afterany, not afterok. An equation that cannot be fitted is now recorded by
+# run_unit.R and the task exits zero, so a non-zero task is a task that did not
+# finish -- a timeout, a node failure, an out-of-memory kill. Under afterok one
+# of those would leave the assembly cancelled as DependencyNeverSatisfied, which
+# is the wrong gate: assemble_store.R already refuses to write a call that is
+# short a unit, and reports which. Let it run and say so.
+ASSEMBLE=$(sbatch --parsable --dependency=afterany:"$UNITS" hpc/run.assemble)
 echo "assemble:       $ASSEMBLE"
 
 cat <<TXT
