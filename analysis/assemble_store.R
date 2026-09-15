@@ -44,20 +44,43 @@ for (key in names(mf$calls)) {
                     expand.dots = TRUE)
   data <- eval(mcl$data, env)
 
-  units <- lapply(paths, function(p) readRDS(p)$fit)
+  records <- lapply(paths, readRDS)
+  units <- lapply(records, `[[`, "fit")
+  ok <- !vapply(units, is.null, logical(1L))
+  if (any(!ok)) {
+    # The same outcome bnec() reaches for a model it could not fit: the set is
+    # averaged over the equations that did fit, and the failure is recorded on
+    # the object rather than lost. attach_failed_models() is what summary()
+    # and failed_models() read.
+    message("    ", sum(!ok), " equation(s) failed and are recorded, not fitted: ",
+            paste(unique(rows$model[!ok]), collapse = ", "))
+  }
+  if (!any(ok)) {
+    message("    every equation failed; nothing to assemble")
+    incomplete <- c(incomplete, info$target)
+    next
+  }
+  failed <- stats::setNames(
+    lapply(which(!ok), function(i) {
+      bayesnec:::failure_record(rows$model[i], records[[i]]$condition)
+    }), rows$model[!ok])
 
   fit <- if (identical(fn, "bnec")) {
-    assemble_models(stats::setNames(units, rows$model))
+    bayesnec:::attach_failed_models(
+      assemble_models(stats::setNames(units[ok], rows$model[ok])), failed)
   } else if (identical(fn, "bnec_group")) {
     plan <- group_plan(mcl, data, env)
     level_fits <- lapply(plan$levels, function(lev) {
-      sel <- rows$level == lev
-      assemble_models(stats::setNames(units[sel], rows$model[sel]))
+      sel <- rows$level == lev & ok
+      lf <- assemble_models(stats::setNames(units[sel], rows$model[sel]))
+      lvl_failed <- failed[rows$model[rows$level == lev & !ok]]
+      if (length(lvl_failed)) lf <- bayesnec:::attach_failed_models(lf, lvl_failed)
+      lf
     })
     names(level_fits) <- plan$levels
     assemble_group(level_fits, plan, mcl$formula, data, env)
   } else {
-    units[[1L]]
+    units[ok][[1L]]
   }
 
   p <- store_path(store, key)

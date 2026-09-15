@@ -73,12 +73,29 @@ if (!identical(key, row$key)) {
 
 plan <- if (identical(fn, "bnec_group")) group_plan(mcl, data, env) else NULL
 t0 <- Sys.time()
-fit <- run_unit(mcl, fn, data, env, level = row$level, model = row$model,
-                plan = plan)
+# A failed equation is recorded, not left as a missing file.
+#
+# bnec() wraps each model of a set in try(): a model that cannot be fitted is
+# stored as NA, its failure is recorded on the returned object, and the set is
+# averaged over the ones that did fit. Letting the task die instead would leave
+# the unit file absent, and assemble_store.R -- which cannot tell an equation
+# that failed from one that has not run yet -- would refuse the whole call.
+# ecxhormebc5 failed on fit_plain and fit_ogl in the first run, which is the
+# initial-value problem of #344 and not something a re-run fixes.
+fit <- try(run_unit(mcl, fn, data, env, level = row$level, model = row$model,
+                    plan = plan), silent = FALSE)
 elapsed <- as.numeric(difftime(Sys.time(), t0, units = "mins"))
+failed <- inherits(fit, "try-error")
 
-saveRDS(list(fit = fit, task = task, key = row$key, level = row$level,
+saveRDS(list(fit = if (failed) NULL else fit,
+             failed = failed,
+             condition = if (failed) attr(fit, "condition") else NULL,
+             task = task, key = row$key, level = row$level,
              model = row$model, minutes = elapsed,
              bayesnec = as.character(packageVersion("bayesnec"))),
         out)
-message(sprintf("  done in %.1f min -> %s", elapsed, out))
+if (failed) {
+  message(sprintf("  FAILED after %.1f min, recorded -> %s", elapsed, out))
+} else {
+  message(sprintf("  done in %.1f min -> %s", elapsed, out))
+}
