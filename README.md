@@ -28,6 +28,12 @@ bayesnec #344 rather than something a re-run fixes; they are recorded as failed
 and their sets averaged over the equations that did fit, which is what `bnec()`
 does with a model it cannot fit. The store is 484 MB.
 
+The vignette then rendered against that store in 38.5 minutes, reporting
+`Precompiled without error` and writing all nine figures. Nothing is sampled in
+those 38.5 minutes: they are `ecx()` and `nsec()` extraction across the 14- and
+18-equation sets, which is the cost bayesnec #306 measured on `example7` and a
+property of the vignette rather than of this arrangement.
+
 ## Agreement between the vignette and the store
 
 Nothing here restates any of the vignette's code.
