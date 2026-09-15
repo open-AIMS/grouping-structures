@@ -34,7 +34,6 @@ write.csv(data.frame(key = names(mf$calls),
 source("shim/fit_store.R")
 
 asked <- character(0)
-readRDS_real <- base::readRDS
 # The placeholders are empty, so the shim's readRDS would fail on the value it
 # never uses here. Intercepted to record the key and hand back a marker.
 assign("readRDS", function(file, ...) {
