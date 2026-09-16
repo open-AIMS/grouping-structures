@@ -64,9 +64,19 @@ mkdir -p "$CACHE"
 
 # Run one Rscript inside the container with the study bound and the host's R
 # libraries kept out.
+# GRP_UNITS and GRP_STORE are forwarded because run_unit.R and
+# assemble_store.R already read them and the job had no way to set them. A
+# package upgrade is the case that needs them: assemble_store.R refuses a set
+# whose units were fitted by a different bayesnec, and the remedy it prints is
+# to delete the units. Pointing the run at directories of its own refits
+# everything under the new version without destroying the store the last
+# version produced, which is the thing already-published figures came from.
+# Unset, both default as before.
 grp_r() {
   singularity exec -B "$STUDY":"$STUDY" --pwd "$STUDY" \
     "${RENV[@]}" --env GRP_STAN_CACHE="$CACHE" \
+    --env GRP_UNITS="${GRP_UNITS:-units}" \
+    --env GRP_STORE="${GRP_STORE:-store}" \
     --env SLURM_CPUS_PER_TASK="${SLURM_CPUS_PER_TASK:-4}" \
     "$SIF" Rscript "$@"
 }
