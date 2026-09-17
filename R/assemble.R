@@ -65,6 +65,18 @@ assemble_models <- function(fits, call_args = list()) {
   } else {
     class(out) <- c("bayesmanecfit", "bnecfit")
   }
+  # expand_manec() does not carry retained_data: bnec() attaches it to the
+  # completed object afterwards, so a set reassembled here loses the columns
+  # that autoplot() colours by when the variable is not in the fitted formula.
+  # The rule is the one c.bnecfit() uses -- carry them where every input agrees,
+  # and drop them where they do not, because a set whose members saw different
+  # data has no single frame to align observations against.
+  retained <- Filter(Negate(is.null),
+                     lapply(unname(fits), function(f) f[["retained_data"]]))
+  if (length(retained) > 0L &&
+      all(vapply(retained[-1], identical, logical(1), retained[[1]]))) {
+    out$retained_data <- retained[[1]]
+  }
   out
 }
 
