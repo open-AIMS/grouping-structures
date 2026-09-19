@@ -1,0 +1,22 @@
+#!/bin/bash
+#SBATCH --job-name=grp-evidence
+#SBATCH --partition=cpuq
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=64GB
+#SBATCH --time=08:00:00
+#SBATCH --output=logs/grp-evidence-%j.log
+#
+# Extracts the numbers example8 reports from the assembled store, so that the
+# 1.45 GB of brmsfit objects stays on the cluster and only the results travel.
+# Same memory and walltime as the assembly, for the same reason: ecx() and
+# nsec() across a fourteen-equation set is bayesnec #306's cost.
+
+set -euo pipefail
+STUDY="${GRP_STUDY:-/export/scratch/$USER/grouping-structures}"
+source "$STUDY/hpc/job-common.sh"
+
+grp_check_bayesnec
+grp_r analysis/plate_term_evidence.R
+echo "=== $(date -Is) done"

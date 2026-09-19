@@ -1,0 +1,866 @@
+==  store_manifest  ==
+[1] "vignette: /export/scratch/rfisher/grouping-structures/bayesnec-src/vignettes/example8.Rmd.orig"
+[2] "bayesnec: 2.1.3.39"                                                                            
+[3] "manifest built: 2026-09-17 22:57:45"                                                           
+[4] "assembled: 2026-09-18 01:15:19"                                                                
+[5] "assembly seed: 228"                                                                            
+
+==  bayesnec  ==
+[1] "2.1.3.39"
+
+==  extracted  ==
+[1] "2026-09-19T13:45:20+1000"
+
+==  thresholds  ==
+                              fit quantity estimate   lower  upper
+fit_pooled.1           fit_pooled     ec10   0.3275 0.21898 0.7031
+fit_pooled.2           fit_pooled     nsec   0.1972 0.04889 0.5333
+fit_pooled.3           fit_pooled      nec   0.1981 0.05415 0.5364
+fit_plate.1             fit_plate     ec10   0.3256 0.30181 0.3509
+fit_plate.2             fit_plate     nsec   0.6966 0.14204 1.1615
+fit_plate.3             fit_plate      nec   0.6966 0.14316 1.1614
+fit_pgl.1                 fit_pgl     ec10   0.3725 0.30687 0.4489
+fit_pgl.2                 fit_pgl     nsec   0.7402 0.20009 1.2497
+fit_pgl.3                 fit_pgl      nec   0.7400 0.20145 1.2495
+fit_batch.1             fit_batch     ec10   0.3300 0.25242 0.4604
+fit_batch.2             fit_batch     nsec   1.1312 0.31167 2.0201
+fit_batch.3             fit_batch      nec   1.1308 0.31128 2.0192
+fit_plate_batch.1 fit_plate_batch     ec10   0.3494 0.31359 0.3824
+fit_plate_batch.2 fit_plate_batch     nsec   1.0729 0.30575 1.8283
+fit_plate_batch.3 fit_plate_batch      nec   1.0724 0.30650 1.8280
+fit_nec_ogl.1         fit_nec_ogl     ec10   0.7850 0.48014 0.8240
+fit_nec_ogl.2         fit_nec_ogl     nsec   0.8813 0.52148 1.0972
+fit_nec_ogl.3         fit_nec_ogl      nec   0.7148 0.41069 0.7497
+fit_nec_gl.1           fit_nec_gl     ec10   1.4564 1.20404 1.7511
+fit_nec_gl.2           fit_nec_gl     nsec   1.4051 1.12722 1.6752
+fit_nec_gl.3           fit_nec_gl      nec   1.3837 1.13870 1.6685
+
+==  sds  ==
+                               fit       model         wi grouping
+fit_plate.1              fit_plate   nec3param 3.447e-109    plate
+fit_plate.2              fit_plate   nec4param 6.628e-110    plate
+fit_plate.3              fit_plate    nechorme 3.029e-114    plate
+fit_plate.4              fit_plate   nechorme4 6.284e-110    plate
+fit_plate.5              fit_plate      ecxexp  0.000e+00    plate
+fit_plate.6              fit_plate   ecx4param  1.340e-08    plate
+fit_plate.7              fit_plate      ecxwb1  1.000e+00    plate
+fit_plate.8              fit_plate      ecxwb2 2.246e-129    plate
+fit_plate.9              fit_plate    ecxwb1p3  2.247e-68    plate
+fit_plate.10             fit_plate    ecxwb2p3  4.414e-37    plate
+fit_plate.11             fit_plate      ecxll5 1.201e-218    plate
+fit_plate.12             fit_plate      ecxll4 4.015e-104    plate
+fit_plate.13             fit_plate      ecxll3  2.538e-08    plate
+fit_plate.14             fit_plate ecxhormebc4  1.856e-08    plate
+fit_pgl.1                  fit_pgl   nec3param 1.888e-169    plate
+fit_pgl.2                  fit_pgl   nec3param 1.888e-169    plate
+fit_pgl.3                  fit_pgl   nec3param 1.888e-169    plate
+fit_pgl.4                  fit_pgl   nec4param 6.169e-206    plate
+fit_pgl.5                  fit_pgl   nec4param 6.169e-206    plate
+fit_pgl.6                  fit_pgl   nec4param 6.169e-206    plate
+fit_pgl.7                  fit_pgl   nec4param 6.169e-206    plate
+fit_pgl.8                  fit_pgl    nechorme 3.656e-217    plate
+fit_pgl.9                  fit_pgl    nechorme 3.656e-217    plate
+fit_pgl.10                 fit_pgl    nechorme 3.656e-217    plate
+fit_pgl.11                 fit_pgl    nechorme 3.656e-217    plate
+fit_pgl.12                 fit_pgl   nechorme4 2.828e-172    plate
+fit_pgl.13                 fit_pgl   nechorme4 2.828e-172    plate
+fit_pgl.14                 fit_pgl   nechorme4 2.828e-172    plate
+fit_pgl.15                 fit_pgl   nechorme4 2.828e-172    plate
+fit_pgl.16                 fit_pgl   nechorme4 2.828e-172    plate
+fit_pgl.17                 fit_pgl      ecxexp  0.000e+00    plate
+fit_pgl.18                 fit_pgl      ecxexp  0.000e+00    plate
+fit_pgl.19                 fit_pgl   ecx4param  9.594e-44    plate
+fit_pgl.20                 fit_pgl   ecx4param  9.594e-44    plate
+fit_pgl.21                 fit_pgl   ecx4param  9.594e-44    plate
+fit_pgl.22                 fit_pgl   ecx4param  9.594e-44    plate
+fit_pgl.23                 fit_pgl      ecxwb1 1.145e-192    plate
+fit_pgl.24                 fit_pgl      ecxwb1 1.145e-192    plate
+fit_pgl.25                 fit_pgl      ecxwb1 1.145e-192    plate
+fit_pgl.26                 fit_pgl      ecxwb1 1.145e-192    plate
+fit_pgl.27                 fit_pgl      ecxwb2  2.325e-91    plate
+fit_pgl.28                 fit_pgl      ecxwb2  2.325e-91    plate
+fit_pgl.29                 fit_pgl      ecxwb2  2.325e-91    plate
+fit_pgl.30                 fit_pgl      ecxwb2  2.325e-91    plate
+fit_pgl.31                 fit_pgl    ecxwb1p3 5.097e-250    plate
+fit_pgl.32                 fit_pgl    ecxwb1p3 5.097e-250    plate
+fit_pgl.33                 fit_pgl    ecxwb1p3 5.097e-250    plate
+fit_pgl.34                 fit_pgl    ecxwb2p3 2.858e-214    plate
+fit_pgl.35                 fit_pgl    ecxwb2p3 2.858e-214    plate
+fit_pgl.36                 fit_pgl    ecxwb2p3 2.858e-214    plate
+fit_pgl.37                 fit_pgl      ecxll5  1.000e+00    plate
+fit_pgl.38                 fit_pgl      ecxll5  1.000e+00    plate
+fit_pgl.39                 fit_pgl      ecxll5  1.000e+00    plate
+fit_pgl.40                 fit_pgl      ecxll5  1.000e+00    plate
+fit_pgl.41                 fit_pgl      ecxll5  1.000e+00    plate
+fit_pgl.42                 fit_pgl      ecxll4  1.303e-43    plate
+fit_pgl.43                 fit_pgl      ecxll4  1.303e-43    plate
+fit_pgl.44                 fit_pgl      ecxll4  1.303e-43    plate
+fit_pgl.45                 fit_pgl      ecxll4  1.303e-43    plate
+fit_pgl.46                 fit_pgl      ecxll3  7.598e-44    plate
+fit_pgl.47                 fit_pgl      ecxll3  7.598e-44    plate
+fit_pgl.48                 fit_pgl      ecxll3  7.598e-44    plate
+fit_pgl.49                 fit_pgl ecxhormebc4  1.349e-43    plate
+fit_pgl.50                 fit_pgl ecxhormebc4  1.349e-43    plate
+fit_pgl.51                 fit_pgl ecxhormebc4  1.349e-43    plate
+fit_pgl.52                 fit_pgl ecxhormebc4  1.349e-43    plate
+fit_batch.1              fit_batch   nec3param  1.181e-16    batch
+fit_batch.2              fit_batch   nec4param  5.076e-17    batch
+fit_batch.3              fit_batch    nechorme  1.185e-16    batch
+fit_batch.4              fit_batch   nechorme4  4.255e-17    batch
+fit_batch.5              fit_batch      ecxexp 2.864e-194    batch
+fit_batch.6              fit_batch   ecx4param  1.745e-03    batch
+fit_batch.7              fit_batch      ecxwb1  4.095e-01    batch
+fit_batch.8              fit_batch      ecxwb2  2.880e-10    batch
+fit_batch.9              fit_batch    ecxwb1p3  4.341e-13    batch
+fit_batch.10             fit_batch    ecxwb2p3  5.580e-10    batch
+fit_batch.11             fit_batch      ecxll5  5.802e-01    batch
+fit_batch.12             fit_batch      ecxll4  1.924e-03    batch
+fit_batch.13             fit_batch      ecxll3  3.395e-03    batch
+fit_batch.14             fit_batch ecxhormebc4  3.328e-03    batch
+fit_plate_batch.1  fit_plate_batch   nec3param 1.898e-113    batch
+fit_plate_batch.2  fit_plate_batch   nec3param 1.898e-113    plate
+fit_plate_batch.3  fit_plate_batch   nec4param 3.191e-116    batch
+fit_plate_batch.4  fit_plate_batch   nec4param 3.191e-116    plate
+fit_plate_batch.5  fit_plate_batch    nechorme 1.740e-115    batch
+fit_plate_batch.6  fit_plate_batch    nechorme 1.740e-115    plate
+fit_plate_batch.7  fit_plate_batch   nechorme4 1.501e-111    batch
+fit_plate_batch.8  fit_plate_batch   nechorme4 1.501e-111    plate
+fit_plate_batch.9  fit_plate_batch      ecxexp  0.000e+00    batch
+fit_plate_batch.10 fit_plate_batch      ecxexp  0.000e+00    plate
+fit_plate_batch.11 fit_plate_batch   ecx4param  2.008e-12    batch
+fit_plate_batch.12 fit_plate_batch   ecx4param  2.008e-12    plate
+fit_plate_batch.13 fit_plate_batch      ecxwb1  1.424e-01    batch
+fit_plate_batch.14 fit_plate_batch      ecxwb1  1.424e-01    plate
+fit_plate_batch.15 fit_plate_batch      ecxwb2  2.524e-40    batch
+fit_plate_batch.16 fit_plate_batch      ecxwb2  2.524e-40    plate
+fit_plate_batch.17 fit_plate_batch    ecxwb1p3  3.850e-69    batch
+fit_plate_batch.18 fit_plate_batch    ecxwb1p3  3.850e-69    plate
+fit_plate_batch.19 fit_plate_batch    ecxwb2p3  8.000e-40    batch
+fit_plate_batch.20 fit_plate_batch    ecxwb2p3  8.000e-40    plate
+fit_plate_batch.21 fit_plate_batch      ecxll5  8.576e-01    batch
+fit_plate_batch.22 fit_plate_batch      ecxll5  8.576e-01    plate
+fit_plate_batch.23 fit_plate_batch      ecxll4  1.404e-12    batch
+fit_plate_batch.24 fit_plate_batch      ecxll4  1.404e-12    plate
+fit_plate_batch.25 fit_plate_batch      ecxll3  1.827e-12    batch
+fit_plate_batch.26 fit_plate_batch      ecxll3  1.827e-12    plate
+fit_plate_batch.27 fit_plate_batch ecxhormebc4  2.563e-12    batch
+fit_plate_batch.28 fit_plate_batch ecxhormebc4  2.563e-12    plate
+fit_nec_ogl.1          fit_nec_ogl   nec3param  8.769e-01    plate
+fit_nec_ogl.2          fit_nec_ogl   nec4param  1.231e-01    plate
+fit_nec_gl.1            fit_nec_gl   nec3param  3.363e-01    plate
+fit_nec_gl.2            fit_nec_gl   nec4param  6.637e-01    plate
+                         parameter      sd    lower  upper
+fit_plate.1          ogl_Intercept 0.43658 0.313720 0.6167
+fit_plate.2          ogl_Intercept 0.43852 0.312902 0.6254
+fit_plate.3          ogl_Intercept 0.43566 0.313129 0.6211
+fit_plate.4          ogl_Intercept 0.44028 0.313776 0.6280
+fit_plate.5          ogl_Intercept 0.22895 0.155315 0.3344
+fit_plate.6          ogl_Intercept 0.44861 0.323853 0.6279
+fit_plate.7          ogl_Intercept 0.44503 0.326837 0.6269
+fit_plate.8          ogl_Intercept 0.53197 0.327711 0.9757
+fit_plate.9          ogl_Intercept 0.44869 0.324966 0.6346
+fit_plate.10         ogl_Intercept 0.44505 0.321148 0.6408
+fit_plate.11         ogl_Intercept 0.34757 0.034601 0.6223
+fit_plate.12         ogl_Intercept 0.56403 0.326645 1.1492
+fit_plate.13         ogl_Intercept 0.44744 0.323927 0.6328
+fit_plate.14         ogl_Intercept 0.44910 0.318548 0.6443
+fit_pgl.1           beta_Intercept 0.13503 0.071863 0.2233
+fit_pgl.2            nec_Intercept 0.15971 0.057757 0.4150
+fit_pgl.3          topgl_Intercept 0.45142 0.323209 0.6426
+fit_pgl.4           beta_Intercept 0.14883 0.066443 0.2849
+fit_pgl.5            nec_Intercept 0.10664 0.054306 0.1840
+fit_pgl.6          botgl_Intercept 0.29466 0.010485 0.9849
+fit_pgl.7          topgl_Intercept 0.45327 0.332017 0.6412
+fit_pgl.8           beta_Intercept 0.14202 0.074397 0.2383
+fit_pgl.9            nec_Intercept 0.17570 0.059958 0.4198
+fit_pgl.10         slope_Intercept 0.52386 0.016312 1.9127
+fit_pgl.11         topgl_Intercept 0.44748 0.320910 0.6390
+fit_pgl.12          beta_Intercept 0.13793 0.071377 0.2291
+fit_pgl.13           nec_Intercept 0.21636 0.061337 0.4524
+fit_pgl.14         slope_Intercept 0.53670 0.018339 2.0139
+fit_pgl.15         botgl_Intercept 0.29362 0.011765 0.9787
+fit_pgl.16         topgl_Intercept 0.44794 0.323186 0.6340
+fit_pgl.17          beta_Intercept 0.23728 0.147660 0.3699
+fit_pgl.18         topgl_Intercept 0.14302 0.093140 0.2195
+fit_pgl.19          ec50_Intercept 0.20168 0.132510 0.3047
+fit_pgl.20          beta_Intercept 0.06828 0.013165 0.1312
+fit_pgl.21         botgl_Intercept 0.26242 0.009585 0.8507
+fit_pgl.22         topgl_Intercept 0.45632 0.328604 0.6486
+fit_pgl.23          ec50_Intercept 0.18460 0.095495 0.2887
+fit_pgl.24          beta_Intercept 0.11373 0.060347 0.2007
+fit_pgl.25         botgl_Intercept 0.58723 0.026326 1.0893
+fit_pgl.26         topgl_Intercept 0.57365 0.334859 1.1310
+fit_pgl.27          ec50_Intercept 0.22826 0.148145 0.3479
+fit_pgl.28          beta_Intercept 0.05747 0.003887 0.1289
+fit_pgl.29         botgl_Intercept 0.39166 0.012112 1.3401
+fit_pgl.30         topgl_Intercept 0.45084 0.327248 0.6380
+fit_pgl.31          ec50_Intercept 0.53420 0.164854 1.2397
+fit_pgl.32          beta_Intercept 0.08292 0.013985 0.1882
+fit_pgl.33         topgl_Intercept 0.72747 0.342334 1.3189
+fit_pgl.34          ec50_Intercept 0.22450 0.136418 0.3498
+fit_pgl.35          beta_Intercept 0.37618 0.014781 1.6941
+fit_pgl.36         topgl_Intercept 0.51909 0.331179 0.8849
+fit_pgl.37          beta_Intercept 0.07593 0.042961 0.1230
+fit_pgl.38          ec50_Intercept 0.10667 0.003486 0.3516
+fit_pgl.39             f_Intercept 0.30198 0.188298 0.5209
+fit_pgl.40         botgl_Intercept 0.51112 0.021267 1.1211
+fit_pgl.41         topgl_Intercept 0.45954 0.331169 0.6502
+fit_pgl.42          beta_Intercept 0.06847 0.012562 0.1308
+fit_pgl.43          ec50_Intercept 0.20360 0.135547 0.3079
+fit_pgl.44         botgl_Intercept 0.26382 0.008902 0.8722
+fit_pgl.45         topgl_Intercept 0.45945 0.331749 0.6526
+fit_pgl.46          beta_Intercept 0.06688 0.013863 0.1262
+fit_pgl.47          ec50_Intercept 0.20425 0.135442 0.3073
+fit_pgl.48         topgl_Intercept 0.45481 0.330203 0.6476
+fit_pgl.49          beta_Intercept 0.06831 0.018606 0.1263
+fit_pgl.50          ec50_Intercept 0.20388 0.134823 0.3091
+fit_pgl.51         slope_Intercept 0.53410 0.015220 1.9992
+fit_pgl.52         topgl_Intercept 0.45849 0.329150 0.6463
+fit_batch.1          ogl_Intercept 0.43066 0.231888 0.8233
+fit_batch.2          ogl_Intercept 0.44331 0.235024 0.8541
+fit_batch.3          ogl_Intercept 0.43179 0.230264 0.8266
+fit_batch.4          ogl_Intercept 0.44141 0.232998 0.8540
+fit_batch.5          ogl_Intercept 0.21135 0.096523 0.4515
+fit_batch.6          ogl_Intercept 0.43197 0.229534 0.8357
+fit_batch.7          ogl_Intercept 0.43629 0.231402 0.8382
+fit_batch.8          ogl_Intercept 0.43169 0.232965 0.8311
+fit_batch.9          ogl_Intercept 0.41949 0.226007 0.8133
+fit_batch.10         ogl_Intercept 0.42921 0.229821 0.8163
+fit_batch.11         ogl_Intercept 0.43468 0.234211 0.8345
+fit_batch.12         ogl_Intercept 0.43557 0.234209 0.8210
+fit_batch.13         ogl_Intercept 0.43443 0.231062 0.8420
+fit_batch.14         ogl_Intercept 0.42934 0.228370 0.8280
+fit_plate_batch.1    ogl_Intercept 0.27543 0.016286 0.7148
+fit_plate_batch.2    ogl_Intercept 0.37464 0.248823 0.5612
+fit_plate_batch.3    ogl_Intercept 0.28921 0.020190 0.7138
+fit_plate_batch.4    ogl_Intercept 0.37099 0.246497 0.5558
+fit_plate_batch.5    ogl_Intercept 0.28639 0.018353 0.7043
+fit_plate_batch.6    ogl_Intercept 0.37511 0.247571 0.5653
+fit_plate_batch.7    ogl_Intercept 0.29139 0.019546 0.7299
+fit_plate_batch.8    ogl_Intercept 0.37660 0.246071 0.5621
+fit_plate_batch.9    ogl_Intercept 0.17040 0.011182 0.4429
+fit_plate_batch.10   ogl_Intercept 0.19889 0.124528 0.3106
+fit_plate_batch.11   ogl_Intercept 0.29310 0.017925 0.7306
+fit_plate_batch.12   ogl_Intercept 0.38725 0.254983 0.5808
+fit_plate_batch.13   ogl_Intercept 0.30169 0.020842 0.7310
+fit_plate_batch.14   ogl_Intercept 0.38389 0.254963 0.5771
+fit_plate_batch.15   ogl_Intercept 0.29346 0.018802 0.7387
+fit_plate_batch.16   ogl_Intercept 0.37938 0.251952 0.5669
+fit_plate_batch.17   ogl_Intercept 0.28798 0.020041 0.7311
+fit_plate_batch.18   ogl_Intercept 0.38856 0.255759 0.5880
+fit_plate_batch.19   ogl_Intercept 0.29928 0.018733 0.7470
+fit_plate_batch.20   ogl_Intercept 0.38128 0.252941 0.5699
+fit_plate_batch.21   ogl_Intercept 0.29240 0.022242 0.7201
+fit_plate_batch.22   ogl_Intercept 0.38758 0.255959 0.5877
+fit_plate_batch.23   ogl_Intercept 0.29435 0.015713 0.7304
+fit_plate_batch.24   ogl_Intercept 0.38496 0.255065 0.5836
+fit_plate_batch.25   ogl_Intercept 0.29939 0.020020 0.7288
+fit_plate_batch.26   ogl_Intercept 0.38017 0.250692 0.5743
+fit_plate_batch.27   ogl_Intercept 0.29439 0.020266 0.7253
+fit_plate_batch.28   ogl_Intercept 0.38539 0.256028 0.5812
+fit_nec_ogl.1        ogl_Intercept 0.43658 0.313720 0.6167
+fit_nec_ogl.2        ogl_Intercept 0.43852 0.312902 0.6254
+fit_nec_gl.1         nec_Intercept 0.30712 0.211211 0.4535
+fit_nec_gl.2         nec_Intercept 0.31396 0.213034 0.4617
+
+==  weights  ==
+                               fit       model  waic         wi
+fit_pooled.1            fit_pooled   nec3param 19377  1.925e-11
+fit_pooled.2            fit_pooled   nec4param 19381  4.223e-12
+fit_pooled.3            fit_pooled    nechorme 19377  1.939e-11
+fit_pooled.4            fit_pooled   nechorme4 19381  4.354e-12
+fit_pooled.5            fit_pooled      ecxexp 20091 7.464e-151
+fit_pooled.6            fit_pooled   ecx4param 19315  1.147e-02
+fit_pooled.7            fit_pooled      ecxwb1 19302  3.163e-01
+fit_pooled.8            fit_pooled      ecxwb2 19346  3.023e-07
+fit_pooled.9            fit_pooled    ecxwb1p3 19378  3.639e-06
+fit_pooled.10           fit_pooled    ecxwb2p3 19342  1.200e-06
+fit_pooled.11           fit_pooled      ecxll5 19300  5.706e-01
+fit_pooled.12           fit_pooled      ecxll4 19315  1.188e-02
+fit_pooled.13           fit_pooled      ecxll3 19312  4.427e-02
+fit_pooled.14           fit_pooled ecxhormebc4 19312  4.555e-02
+fit_plate.1              fit_plate   nec3param 18188 3.447e-109
+fit_plate.2              fit_plate   nec4param 18192 6.628e-110
+fit_plate.3              fit_plate    nechorme 18238 3.029e-114
+fit_plate.4              fit_plate   nechorme4 18192 6.284e-110
+fit_plate.5              fit_plate      ecxexp 19885  0.000e+00
+fit_plate.6              fit_plate   ecx4param 17677  1.340e-08
+fit_plate.7              fit_plate      ecxwb1 17572  1.000e+00
+fit_plate.8              fit_plate      ecxwb2 18629 2.246e-129
+fit_plate.9              fit_plate    ecxwb1p3 17990  2.247e-68
+fit_plate.10             fit_plate    ecxwb2p3 17846  4.414e-37
+fit_plate.11             fit_plate      ecxll5 18689 1.201e-218
+fit_plate.12             fit_plate      ecxll4 18629 4.015e-104
+fit_plate.13             fit_plate      ecxll3 17677  2.538e-08
+fit_plate.14             fit_plate ecxhormebc4 17678  1.856e-08
+fit_pgl.1                  fit_pgl   nec3param 18020 1.888e-169
+fit_pgl.2                  fit_pgl   nec4param 18209 6.169e-206
+fit_pgl.3                  fit_pgl    nechorme 18264 3.656e-217
+fit_pgl.4                  fit_pgl   nechorme4 18064 2.828e-172
+fit_pgl.5                  fit_pgl      ecxexp 19806  0.000e+00
+fit_pgl.6                  fit_pgl   ecx4param 17400  9.594e-44
+fit_pgl.7                  fit_pgl      ecxwb1 18411 1.145e-192
+fit_pgl.8                  fit_pgl      ecxwb2 17639  2.325e-91
+fit_pgl.9                  fit_pgl    ecxwb1p3 19042 5.097e-250
+fit_pgl.10                 fit_pgl    ecxwb2p3 18599 2.858e-214
+fit_pgl.11                 fit_pgl      ecxll5 17087  1.000e+00
+fit_pgl.12                 fit_pgl      ecxll4 17400  1.303e-43
+fit_pgl.13                 fit_pgl      ecxll3 17397  7.598e-44
+fit_pgl.14                 fit_pgl ecxhormebc4 17396  1.349e-43
+fit_batch.1              fit_batch   nec3param 19088  1.181e-16
+fit_batch.2              fit_batch   nec4param 19091  5.076e-17
+fit_batch.3              fit_batch    nechorme 19088  1.185e-16
+fit_batch.4              fit_batch   nechorme4 19092  4.255e-17
+fit_batch.5              fit_batch      ecxexp 19987 2.864e-194
+fit_batch.6              fit_batch   ecx4param 18997  1.745e-03
+fit_batch.7              fit_batch      ecxwb1 18969  4.095e-01
+fit_batch.8              fit_batch      ecxwb2 19044  2.880e-10
+fit_batch.9              fit_batch    ecxwb1p3 19092  4.341e-13
+fit_batch.10             fit_batch    ecxwb2p3 19040  5.580e-10
+fit_batch.11             fit_batch      ecxll5 18968  5.802e-01
+fit_batch.12             fit_batch      ecxll4 18997  1.924e-03
+fit_batch.13             fit_batch      ecxll3 18995  3.395e-03
+fit_batch.14             fit_batch ecxhormebc4 18995  3.328e-03
+fit_plate_batch.1  fit_plate_batch   nec3param 18229 1.898e-113
+fit_plate_batch.2  fit_plate_batch   nec4param 18241 3.191e-116
+fit_plate_batch.3  fit_plate_batch    nechorme 18237 1.740e-115
+fit_plate_batch.4  fit_plate_batch   nechorme4 18192 1.501e-111
+fit_plate_batch.5  fit_plate_batch      ecxexp 19885  0.000e+00
+fit_plate_batch.6  fit_plate_batch   ecx4param 17676  2.008e-12
+fit_plate_batch.7  fit_plate_batch      ecxwb1 17573  1.424e-01
+fit_plate_batch.8  fit_plate_batch      ecxwb2 17849  2.524e-40
+fit_plate_batch.9  fit_plate_batch    ecxwb1p3 17989  3.850e-69
+fit_plate_batch.10 fit_plate_batch    ecxwb2p3 17846  8.000e-40
+fit_plate_batch.11 fit_plate_batch      ecxll5 17567  8.576e-01
+fit_plate_batch.12 fit_plate_batch      ecxll4 17677  1.404e-12
+fit_plate_batch.13 fit_plate_batch      ecxll3 17677  1.827e-12
+fit_plate_batch.14 fit_plate_batch ecxhormebc4 17677  2.563e-12
+fit_nec_ogl.1          fit_nec_ogl   nec3param 18188  8.769e-01
+fit_nec_ogl.2          fit_nec_ogl   nec4param 18192  1.231e-01
+fit_nec_gl.1            fit_nec_gl   nec3param 19185  3.363e-01
+fit_nec_gl.2            fit_nec_gl   nec4param 19183  6.637e-01
+
+==  sampling  ==
+                               fit         model              flagged
+fit_pooled.1            fit_pooled         model            nec3param
+fit_pooled.2            fit_pooled      max_rhat            nec4param
+fit_pooled.3            fit_pooled       min_ess             nechorme
+fit_pooled.4            fit_pooled min_ess_ratio            nechorme4
+fit_pooled.5            fit_pooled   n_divergent               ecxexp
+fit_pooled.6            fit_pooled        failed            ecx4param
+fit_pooled.7            fit_pooled         model               ecxwb1
+fit_pooled.8            fit_pooled      max_rhat               ecxwb2
+fit_pooled.9            fit_pooled       min_ess             ecxwb1p3
+fit_pooled.10           fit_pooled min_ess_ratio             ecxwb2p3
+fit_pooled.11           fit_pooled   n_divergent               ecxll5
+fit_pooled.12           fit_pooled        failed               ecxll4
+fit_pooled.13           fit_pooled         model               ecxll3
+fit_pooled.14           fit_pooled      max_rhat          ecxhormebc4
+fit_pooled.15           fit_pooled       min_ess     1.00145839501214
+fit_pooled.16           fit_pooled min_ess_ratio     1.00155306458748
+fit_pooled.17           fit_pooled   n_divergent     1.00304753889285
+fit_pooled.18           fit_pooled        failed     1.00149907660216
+fit_pooled.19           fit_pooled         model     1.00167713586995
+fit_pooled.20           fit_pooled      max_rhat     1.00062211975864
+fit_pooled.21           fit_pooled       min_ess     1.00085169135816
+fit_pooled.22           fit_pooled min_ess_ratio     1.00068840422018
+fit_pooled.23           fit_pooled   n_divergent     1.00130217073155
+fit_pooled.24           fit_pooled        failed     1.00114280345602
+fit_pooled.25           fit_pooled         model     1.00215585096952
+fit_pooled.26           fit_pooled      max_rhat      1.0006175608134
+fit_pooled.27           fit_pooled       min_ess     1.00198082185894
+fit_pooled.28           fit_pooled min_ess_ratio     1.00066799529914
+fit_pooled.29           fit_pooled   n_divergent     2067.65373608839
+fit_pooled.30           fit_pooled        failed     1867.28909436822
+fit_pooled.31           fit_pooled         model     2253.59944456581
+fit_pooled.32           fit_pooled      max_rhat     1877.59599017359
+fit_pooled.33           fit_pooled       min_ess     1388.32738696833
+fit_pooled.34           fit_pooled min_ess_ratio     3355.53487235039
+fit_pooled.35           fit_pooled   n_divergent     3562.30121894139
+fit_pooled.36           fit_pooled        failed     3197.47566132242
+fit_pooled.37           fit_pooled         model     3114.75904463435
+fit_pooled.38           fit_pooled      max_rhat     3448.24971264147
+fit_pooled.39           fit_pooled       min_ess     1594.25277317346
+fit_pooled.40           fit_pooled min_ess_ratio     2768.46679361551
+fit_pooled.41           fit_pooled   n_divergent     3566.71272684442
+fit_pooled.42           fit_pooled        failed     3686.80767043795
+fit_pooled.43           fit_pooled         model    0.258456717011048
+fit_pooled.44           fit_pooled      max_rhat    0.233411136796027
+fit_pooled.45           fit_pooled       min_ess    0.281699930570727
+fit_pooled.46           fit_pooled min_ess_ratio    0.234699498771698
+fit_pooled.47           fit_pooled   n_divergent    0.173540923371041
+fit_pooled.48           fit_pooled        failed    0.419441859043799
+fit_pooled.49           fit_pooled         model    0.445287652367674
+fit_pooled.50           fit_pooled      max_rhat    0.399684457665303
+fit_pooled.51           fit_pooled       min_ess    0.389344880579294
+fit_pooled.52           fit_pooled min_ess_ratio    0.431031214080184
+fit_pooled.53           fit_pooled   n_divergent    0.199281596646682
+fit_pooled.54           fit_pooled        failed    0.346058349201938
+fit_pooled.55           fit_pooled         model    0.445839090855552
+fit_pooled.56           fit_pooled      max_rhat    0.460850958804744
+fit_pooled.57           fit_pooled       min_ess                    0
+fit_pooled.58           fit_pooled min_ess_ratio                    0
+fit_pooled.59           fit_pooled   n_divergent                    0
+fit_pooled.60           fit_pooled        failed                    0
+fit_pooled.61           fit_pooled         model                    0
+fit_pooled.62           fit_pooled      max_rhat                    0
+fit_pooled.63           fit_pooled       min_ess                    0
+fit_pooled.64           fit_pooled min_ess_ratio                    0
+fit_pooled.65           fit_pooled   n_divergent                    0
+fit_pooled.66           fit_pooled        failed                    0
+fit_pooled.67           fit_pooled         model                   11
+fit_pooled.68           fit_pooled      max_rhat                    0
+fit_pooled.69           fit_pooled       min_ess                    0
+fit_pooled.70           fit_pooled min_ess_ratio                   44
+fit_pooled.71           fit_pooled   n_divergent                FALSE
+fit_pooled.72           fit_pooled        failed                FALSE
+fit_pooled.73           fit_pooled         model                FALSE
+fit_pooled.74           fit_pooled      max_rhat                FALSE
+fit_pooled.75           fit_pooled       min_ess                FALSE
+fit_pooled.76           fit_pooled min_ess_ratio                FALSE
+fit_pooled.77           fit_pooled   n_divergent                FALSE
+fit_pooled.78           fit_pooled        failed                FALSE
+fit_pooled.79           fit_pooled         model                FALSE
+fit_pooled.80           fit_pooled      max_rhat                FALSE
+fit_pooled.81           fit_pooled       min_ess                 TRUE
+fit_pooled.82           fit_pooled min_ess_ratio                FALSE
+fit_pooled.83           fit_pooled   n_divergent                FALSE
+fit_pooled.84           fit_pooled        failed                 TRUE
+fit_plate.1              fit_plate         model            nec3param
+fit_plate.2              fit_plate      max_rhat            nec4param
+fit_plate.3              fit_plate       min_ess             nechorme
+fit_plate.4              fit_plate min_ess_ratio            nechorme4
+fit_plate.5              fit_plate   n_divergent               ecxexp
+fit_plate.6              fit_plate        failed            ecx4param
+fit_plate.7              fit_plate         model               ecxwb1
+fit_plate.8              fit_plate      max_rhat               ecxwb2
+fit_plate.9              fit_plate       min_ess             ecxwb1p3
+fit_plate.10             fit_plate min_ess_ratio             ecxwb2p3
+fit_plate.11             fit_plate   n_divergent               ecxll5
+fit_plate.12             fit_plate        failed               ecxll4
+fit_plate.13             fit_plate         model               ecxll3
+fit_plate.14             fit_plate      max_rhat          ecxhormebc4
+fit_plate.15             fit_plate       min_ess     1.52909221920118
+fit_plate.16             fit_plate min_ess_ratio     1.53028679999495
+fit_plate.17             fit_plate   n_divergent     1.75039370670328
+fit_plate.18             fit_plate        failed     1.53020923953418
+fit_plate.19             fit_plate         model     1.00366748182833
+fit_plate.20             fit_plate      max_rhat     1.00422745961063
+fit_plate.21             fit_plate       min_ess     1.00324668258767
+fit_plate.22             fit_plate min_ess_ratio     1.53004673212913
+fit_plate.23             fit_plate   n_divergent     1.00505320697298
+fit_plate.24             fit_plate        failed     1.00329082604548
+fit_plate.25             fit_plate         model     1.53376254221555
+fit_plate.26             fit_plate      max_rhat     1.53095658010646
+fit_plate.27             fit_plate       min_ess      1.0034415000255
+fit_plate.28             fit_plate min_ess_ratio     1.00258588053184
+fit_plate.29             fit_plate   n_divergent     7.16434441736539
+fit_plate.30             fit_plate        failed     7.15987004418337
+fit_plate.31             fit_plate         model     6.06234147701457
+fit_plate.32             fit_plate      max_rhat     7.14880543118671
+fit_plate.33             fit_plate       min_ess     1409.04484122305
+fit_plate.34             fit_plate min_ess_ratio     1306.60577482083
+fit_plate.35             fit_plate   n_divergent     1022.84166984865
+fit_plate.36             fit_plate        failed     7.17627254349862
+fit_plate.37             fit_plate         model     1017.51816941084
+fit_plate.38             fit_plate      max_rhat     1242.80649273256
+fit_plate.39             fit_plate       min_ess     7.15846513720681
+fit_plate.40             fit_plate min_ess_ratio     7.14350486371793
+fit_plate.41             fit_plate   n_divergent     1266.23058272808
+fit_plate.42             fit_plate        failed     636.669089395331
+fit_plate.43             fit_plate         model 0.000895543052170674
+fit_plate.44             fit_plate      max_rhat 0.000894983755522921
+fit_plate.45             fit_plate       min_ess 0.000757792684626822
+fit_plate.46             fit_plate min_ess_ratio 0.000893600678898339
+fit_plate.47             fit_plate   n_divergent    0.176130605152881
+fit_plate.48             fit_plate        failed    0.163325721852604
+fit_plate.49             fit_plate         model    0.127855208731081
+fit_plate.50             fit_plate      max_rhat 0.000897034067937328
+fit_plate.51             fit_plate       min_ess    0.127189771176355
+fit_plate.52             fit_plate min_ess_ratio     0.15535081159157
+fit_plate.53             fit_plate   n_divergent 0.000894808142150851
+fit_plate.54             fit_plate        failed 0.000892938107964742
+fit_plate.55             fit_plate         model     0.15827882284101
+fit_plate.56             fit_plate      max_rhat   0.0795836361744163
+fit_plate.57             fit_plate       min_ess                    0
+fit_plate.58             fit_plate min_ess_ratio                    0
+fit_plate.59             fit_plate   n_divergent                    0
+fit_plate.60             fit_plate        failed                    0
+fit_plate.61             fit_plate         model                    0
+fit_plate.62             fit_plate      max_rhat                    0
+fit_plate.63             fit_plate       min_ess                    0
+fit_plate.64             fit_plate min_ess_ratio                    0
+fit_plate.65             fit_plate   n_divergent                    0
+fit_plate.66             fit_plate        failed                    0
+fit_plate.67             fit_plate         model                  148
+fit_plate.68             fit_plate      max_rhat                    0
+fit_plate.69             fit_plate       min_ess                    0
+fit_plate.70             fit_plate min_ess_ratio                    0
+fit_plate.71             fit_plate   n_divergent                 TRUE
+fit_plate.72             fit_plate        failed                 TRUE
+fit_plate.73             fit_plate         model                 TRUE
+fit_plate.74             fit_plate      max_rhat                 TRUE
+fit_plate.75             fit_plate       min_ess                FALSE
+fit_plate.76             fit_plate min_ess_ratio                FALSE
+fit_plate.77             fit_plate   n_divergent                FALSE
+fit_plate.78             fit_plate        failed                 TRUE
+fit_plate.79             fit_plate         model                FALSE
+fit_plate.80             fit_plate      max_rhat                FALSE
+fit_plate.81             fit_plate       min_ess                 TRUE
+fit_plate.82             fit_plate min_ess_ratio                 TRUE
+fit_plate.83             fit_plate   n_divergent                FALSE
+fit_plate.84             fit_plate        failed                FALSE
+fit_pgl.1                  fit_pgl         model            nec3param
+fit_pgl.2                  fit_pgl      max_rhat            nec4param
+fit_pgl.3                  fit_pgl       min_ess             nechorme
+fit_pgl.4                  fit_pgl min_ess_ratio            nechorme4
+fit_pgl.5                  fit_pgl   n_divergent               ecxexp
+fit_pgl.6                  fit_pgl        failed            ecx4param
+fit_pgl.7                  fit_pgl         model               ecxwb1
+fit_pgl.8                  fit_pgl      max_rhat               ecxwb2
+fit_pgl.9                  fit_pgl       min_ess             ecxwb1p3
+fit_pgl.10                 fit_pgl min_ess_ratio             ecxwb2p3
+fit_pgl.11                 fit_pgl   n_divergent               ecxll5
+fit_pgl.12                 fit_pgl        failed               ecxll4
+fit_pgl.13                 fit_pgl         model               ecxll3
+fit_pgl.14                 fit_pgl      max_rhat          ecxhormebc4
+fit_pgl.15                 fit_pgl       min_ess     1.55044849703007
+fit_pgl.16                 fit_pgl min_ess_ratio     1.52995398976389
+fit_pgl.17                 fit_pgl   n_divergent     2.41416786621491
+fit_pgl.18                 fit_pgl        failed     1.76946999810178
+fit_pgl.19                 fit_pgl         model     1.00145465188614
+fit_pgl.20                 fit_pgl      max_rhat     1.00486301463077
+fit_pgl.21                 fit_pgl       min_ess     1.53357551915274
+fit_pgl.22                 fit_pgl min_ess_ratio     1.00290633652709
+fit_pgl.23                 fit_pgl   n_divergent     1.73676076115006
+fit_pgl.24                 fit_pgl        failed     1.53429962464369
+fit_pgl.25                 fit_pgl         model     1.00855747071262
+fit_pgl.26                 fit_pgl      max_rhat     1.00514363712517
+fit_pgl.27                 fit_pgl       min_ess     1.00287292978767
+fit_pgl.28                 fit_pgl min_ess_ratio     1.01153576726553
+fit_pgl.29                 fit_pgl   n_divergent     6.95752068146682
+fit_pgl.30                 fit_pgl        failed     7.10834528014391
+fit_pgl.31                 fit_pgl         model     4.86645155265907
+fit_pgl.32                 fit_pgl      max_rhat     5.94797782407465
+fit_pgl.33                 fit_pgl       min_ess     1776.17487277767
+fit_pgl.34                 fit_pgl min_ess_ratio     981.183646890213
+fit_pgl.35                 fit_pgl   n_divergent     7.11035622121082
+fit_pgl.36                 fit_pgl        failed     1091.41599430755
+fit_pgl.37                 fit_pgl         model     6.07248395914336
+fit_pgl.38                 fit_pgl      max_rhat     7.12596024614423
+fit_pgl.39                 fit_pgl       min_ess     672.777362486958
+fit_pgl.40                 fit_pgl min_ess_ratio     1066.28304628565
+fit_pgl.41                 fit_pgl   n_divergent     1566.72580188007
+fit_pgl.42                 fit_pgl        failed     854.742672823013
+fit_pgl.43                 fit_pgl         model 0.000869690085183352
+fit_pgl.44                 fit_pgl      max_rhat 0.000888543160017989
+fit_pgl.45                 fit_pgl       min_ess 0.000608306444082384
+fit_pgl.46                 fit_pgl min_ess_ratio 0.000743497228009331
+fit_pgl.47                 fit_pgl   n_divergent    0.222021859097209
+fit_pgl.48                 fit_pgl        failed    0.122647955861277
+fit_pgl.49                 fit_pgl         model 0.000888794527651353
+fit_pgl.50                 fit_pgl      max_rhat    0.136426999288443
+fit_pgl.51                 fit_pgl       min_ess  0.00075906049489292
+fit_pgl.52                 fit_pgl min_ess_ratio 0.000890745030768029
+fit_pgl.53                 fit_pgl   n_divergent   0.0840971703108698
+fit_pgl.54                 fit_pgl        failed    0.133285380785706
+fit_pgl.55                 fit_pgl         model    0.195840725235009
+fit_pgl.56                 fit_pgl      max_rhat    0.106842834102877
+fit_pgl.57                 fit_pgl       min_ess                    0
+fit_pgl.58                 fit_pgl min_ess_ratio                    0
+fit_pgl.59                 fit_pgl   n_divergent                    0
+fit_pgl.60                 fit_pgl        failed                    0
+fit_pgl.61                 fit_pgl         model                    0
+fit_pgl.62                 fit_pgl      max_rhat                    0
+fit_pgl.63                 fit_pgl       min_ess                    0
+fit_pgl.64                 fit_pgl min_ess_ratio                    0
+fit_pgl.65                 fit_pgl   n_divergent                    0
+fit_pgl.66                 fit_pgl        failed                    0
+fit_pgl.67                 fit_pgl         model                   15
+fit_pgl.68                 fit_pgl      max_rhat                    0
+fit_pgl.69                 fit_pgl       min_ess                    0
+fit_pgl.70                 fit_pgl min_ess_ratio                    0
+fit_pgl.71                 fit_pgl   n_divergent                 TRUE
+fit_pgl.72                 fit_pgl        failed                 TRUE
+fit_pgl.73                 fit_pgl         model                 TRUE
+fit_pgl.74                 fit_pgl      max_rhat                 TRUE
+fit_pgl.75                 fit_pgl       min_ess                FALSE
+fit_pgl.76                 fit_pgl min_ess_ratio                FALSE
+fit_pgl.77                 fit_pgl   n_divergent                 TRUE
+fit_pgl.78                 fit_pgl        failed                FALSE
+fit_pgl.79                 fit_pgl         model                 TRUE
+fit_pgl.80                 fit_pgl      max_rhat                 TRUE
+fit_pgl.81                 fit_pgl       min_ess                 TRUE
+fit_pgl.82                 fit_pgl min_ess_ratio                FALSE
+fit_pgl.83                 fit_pgl   n_divergent                FALSE
+fit_pgl.84                 fit_pgl        failed                 TRUE
+fit_batch.1              fit_batch         model            nec3param
+fit_batch.2              fit_batch      max_rhat            nec4param
+fit_batch.3              fit_batch       min_ess             nechorme
+fit_batch.4              fit_batch min_ess_ratio            nechorme4
+fit_batch.5              fit_batch   n_divergent               ecxexp
+fit_batch.6              fit_batch        failed            ecx4param
+fit_batch.7              fit_batch         model               ecxwb1
+fit_batch.8              fit_batch      max_rhat               ecxwb2
+fit_batch.9              fit_batch       min_ess             ecxwb1p3
+fit_batch.10             fit_batch min_ess_ratio             ecxwb2p3
+fit_batch.11             fit_batch   n_divergent               ecxll5
+fit_batch.12             fit_batch        failed               ecxll4
+fit_batch.13             fit_batch         model               ecxll3
+fit_batch.14             fit_batch      max_rhat          ecxhormebc4
+fit_batch.15             fit_batch       min_ess     1.00181116907817
+fit_batch.16             fit_batch min_ess_ratio     1.00275595545813
+fit_batch.17             fit_batch   n_divergent     1.00186717205767
+fit_batch.18             fit_batch        failed     1.00306949566352
+fit_batch.19             fit_batch         model     1.00382202604283
+fit_batch.20             fit_batch      max_rhat     1.00477363281482
+fit_batch.21             fit_batch       min_ess     1.00201187840207
+fit_batch.22             fit_batch min_ess_ratio     1.00217345307085
+fit_batch.23             fit_batch   n_divergent     1.00116182748028
+fit_batch.24             fit_batch        failed     1.00135807309791
+fit_batch.25             fit_batch         model     1.00138327905926
+fit_batch.26             fit_batch      max_rhat      1.0035750359517
+fit_batch.27             fit_batch       min_ess     1.00181151652539
+fit_batch.28             fit_batch min_ess_ratio     1.00158396843056
+fit_batch.29             fit_batch   n_divergent     2320.07758225163
+fit_batch.30             fit_batch        failed     2443.85206022815
+fit_batch.31             fit_batch         model     2438.89854449159
+fit_batch.32             fit_batch      max_rhat     2506.78773054301
+fit_batch.33             fit_batch       min_ess     1996.93526997719
+fit_batch.34             fit_batch min_ess_ratio      2064.8377407823
+fit_batch.35             fit_batch   n_divergent     2089.79902889462
+fit_batch.36             fit_batch        failed     2211.63547361743
+fit_batch.37             fit_batch         model      2405.9493567169
+fit_batch.38             fit_batch      max_rhat     2236.58753193792
+fit_batch.39             fit_batch       min_ess     2378.93702016835
+fit_batch.40             fit_batch min_ess_ratio     2537.76965869882
+fit_batch.41             fit_batch   n_divergent     2352.11033332132
+fit_batch.42             fit_batch        failed     2480.10486560564
+fit_batch.43             fit_batch         model    0.290009697781453
+fit_batch.44             fit_batch      max_rhat    0.305481507528518
+fit_batch.45             fit_batch       min_ess    0.304862318061449
+fit_batch.46             fit_batch min_ess_ratio    0.313348466317877
+fit_batch.47             fit_batch   n_divergent    0.249616908747148
+fit_batch.48             fit_batch        failed    0.258104717597787
+fit_batch.49             fit_batch         model    0.261224878611827
+fit_batch.50             fit_batch      max_rhat    0.276454434202178
+fit_batch.51             fit_batch       min_ess    0.300743669589613
+fit_batch.52             fit_batch min_ess_ratio     0.27957344149224
+fit_batch.53             fit_batch   n_divergent    0.297367127521044
+fit_batch.54             fit_batch        failed    0.317221207337353
+fit_batch.55             fit_batch         model    0.294013791665164
+fit_batch.56             fit_batch      max_rhat    0.310013108200705
+fit_batch.57             fit_batch       min_ess                    0
+fit_batch.58             fit_batch min_ess_ratio                    0
+fit_batch.59             fit_batch   n_divergent                    0
+fit_batch.60             fit_batch        failed                    0
+fit_batch.61             fit_batch         model                    0
+fit_batch.62             fit_batch      max_rhat                    0
+fit_batch.63             fit_batch       min_ess                    0
+fit_batch.64             fit_batch min_ess_ratio                    0
+fit_batch.65             fit_batch   n_divergent                    0
+fit_batch.66             fit_batch        failed                    0
+fit_batch.67             fit_batch         model                    5
+fit_batch.68             fit_batch      max_rhat                    0
+fit_batch.69             fit_batch       min_ess                    0
+fit_batch.70             fit_batch min_ess_ratio                    0
+fit_batch.71             fit_batch   n_divergent                FALSE
+fit_batch.72             fit_batch        failed                FALSE
+fit_batch.73             fit_batch         model                FALSE
+fit_batch.74             fit_batch      max_rhat                FALSE
+fit_batch.75             fit_batch       min_ess                FALSE
+fit_batch.76             fit_batch min_ess_ratio                FALSE
+fit_batch.77             fit_batch   n_divergent                FALSE
+fit_batch.78             fit_batch        failed                FALSE
+fit_batch.79             fit_batch         model                FALSE
+fit_batch.80             fit_batch      max_rhat                FALSE
+fit_batch.81             fit_batch       min_ess                FALSE
+fit_batch.82             fit_batch min_ess_ratio                FALSE
+fit_batch.83             fit_batch   n_divergent                FALSE
+fit_batch.84             fit_batch        failed                FALSE
+fit_plate_batch.1  fit_plate_batch         model            nec3param
+fit_plate_batch.2  fit_plate_batch      max_rhat            nec4param
+fit_plate_batch.3  fit_plate_batch       min_ess             nechorme
+fit_plate_batch.4  fit_plate_batch min_ess_ratio            nechorme4
+fit_plate_batch.5  fit_plate_batch   n_divergent               ecxexp
+fit_plate_batch.6  fit_plate_batch        failed            ecx4param
+fit_plate_batch.7  fit_plate_batch         model               ecxwb1
+fit_plate_batch.8  fit_plate_batch      max_rhat               ecxwb2
+fit_plate_batch.9  fit_plate_batch       min_ess             ecxwb1p3
+fit_plate_batch.10 fit_plate_batch min_ess_ratio             ecxwb2p3
+fit_plate_batch.11 fit_plate_batch   n_divergent               ecxll5
+fit_plate_batch.12 fit_plate_batch        failed               ecxll4
+fit_plate_batch.13 fit_plate_batch         model               ecxll3
+fit_plate_batch.14 fit_plate_batch      max_rhat          ecxhormebc4
+fit_plate_batch.15 fit_plate_batch       min_ess     1.52883831571375
+fit_plate_batch.16 fit_plate_batch min_ess_ratio     1.73577168249514
+fit_plate_batch.17 fit_plate_batch   n_divergent     1.73351739409968
+fit_plate_batch.18 fit_plate_batch        failed       1.530137923876
+fit_plate_batch.19 fit_plate_batch         model     1.00200483893553
+fit_plate_batch.20 fit_plate_batch      max_rhat     1.00256388477032
+fit_plate_batch.21 fit_plate_batch       min_ess     1.00114399766075
+fit_plate_batch.22 fit_plate_batch min_ess_ratio     1.00261981308211
+fit_plate_batch.23 fit_plate_batch   n_divergent     1.00198686669392
+fit_plate_batch.24 fit_plate_batch        failed     1.01131922465015
+fit_plate_batch.25 fit_plate_batch         model     1.00458156781628
+fit_plate_batch.26 fit_plate_batch      max_rhat     1.00269075679845
+fit_plate_batch.27 fit_plate_batch       min_ess     1.00412234421159
+fit_plate_batch.28 fit_plate_batch min_ess_ratio     1.00496208698738
+fit_plate_batch.29 fit_plate_batch   n_divergent     7.11395414086229
+fit_plate_batch.30 fit_plate_batch        failed     6.07127039914061
+fit_plate_batch.31 fit_plate_batch         model     6.07773679651068
+fit_plate_batch.32 fit_plate_batch      max_rhat     7.14275086421108
+fit_plate_batch.33 fit_plate_batch       min_ess     1934.33739963924
+fit_plate_batch.34 fit_plate_batch min_ess_ratio     1954.78378982806
+fit_plate_batch.35 fit_plate_batch   n_divergent      2049.6045555939
+fit_plate_batch.36 fit_plate_batch        failed     2050.42410112446
+fit_plate_batch.37 fit_plate_batch         model     1708.88586204528
+fit_plate_batch.38 fit_plate_batch      max_rhat     117.901059179586
+fit_plate_batch.39 fit_plate_batch       min_ess      2136.5029538302
+fit_plate_batch.40 fit_plate_batch min_ess_ratio     1767.81663100087
+fit_plate_batch.41 fit_plate_batch   n_divergent     2034.71991324679
+fit_plate_batch.42 fit_plate_batch        failed     1037.69200686739
+fit_plate_batch.43 fit_plate_batch         model 0.000889244267607786
+fit_plate_batch.44 fit_plate_batch      max_rhat 0.000758908799892576
+fit_plate_batch.45 fit_plate_batch       min_ess 0.000759717099563835
+fit_plate_batch.46 fit_plate_batch min_ess_ratio 0.000892843858026386
+fit_plate_batch.47 fit_plate_batch   n_divergent    0.241792174954904
+fit_plate_batch.48 fit_plate_batch        failed    0.244347973728507
+fit_plate_batch.49 fit_plate_batch         model    0.256200569449237
+fit_plate_batch.50 fit_plate_batch      max_rhat    0.256303012640558
+fit_plate_batch.51 fit_plate_batch       min_ess     0.21361073275566
+fit_plate_batch.52 fit_plate_batch min_ess_ratio   0.0147376323974482
+fit_plate_batch.53 fit_plate_batch   n_divergent    0.267062869228775
+fit_plate_batch.54 fit_plate_batch        failed    0.220977078875109
+fit_plate_batch.55 fit_plate_batch         model    0.254339989155849
+fit_plate_batch.56 fit_plate_batch      max_rhat    0.129711500858423
+fit_plate_batch.57 fit_plate_batch       min_ess                   21
+fit_plate_batch.58 fit_plate_batch min_ess_ratio                   17
+fit_plate_batch.59 fit_plate_batch   n_divergent                    0
+fit_plate_batch.60 fit_plate_batch        failed                    0
+fit_plate_batch.61 fit_plate_batch         model                    2
+fit_plate_batch.62 fit_plate_batch      max_rhat                   25
+fit_plate_batch.63 fit_plate_batch       min_ess                    7
+fit_plate_batch.64 fit_plate_batch min_ess_ratio                   11
+fit_plate_batch.65 fit_plate_batch   n_divergent                   31
+fit_plate_batch.66 fit_plate_batch        failed                  133
+fit_plate_batch.67 fit_plate_batch         model                   17
+fit_plate_batch.68 fit_plate_batch      max_rhat                   24
+fit_plate_batch.69 fit_plate_batch       min_ess                   16
+fit_plate_batch.70 fit_plate_batch min_ess_ratio                    0
+fit_plate_batch.71 fit_plate_batch   n_divergent                 TRUE
+fit_plate_batch.72 fit_plate_batch        failed                 TRUE
+fit_plate_batch.73 fit_plate_batch         model                 TRUE
+fit_plate_batch.74 fit_plate_batch      max_rhat                 TRUE
+fit_plate_batch.75 fit_plate_batch       min_ess                FALSE
+fit_plate_batch.76 fit_plate_batch min_ess_ratio                 TRUE
+fit_plate_batch.77 fit_plate_batch   n_divergent                FALSE
+fit_plate_batch.78 fit_plate_batch        failed                 TRUE
+fit_plate_batch.79 fit_plate_batch         model                 TRUE
+fit_plate_batch.80 fit_plate_batch      max_rhat                 TRUE
+fit_plate_batch.81 fit_plate_batch       min_ess                 TRUE
+fit_plate_batch.82 fit_plate_batch min_ess_ratio                 TRUE
+fit_plate_batch.83 fit_plate_batch   n_divergent                 TRUE
+fit_plate_batch.84 fit_plate_batch        failed                FALSE
+fit_nec_ogl.1          fit_nec_ogl         model            nec3param
+fit_nec_ogl.2          fit_nec_ogl      max_rhat            nec4param
+fit_nec_ogl.3          fit_nec_ogl       min_ess     1.52909221920118
+fit_nec_ogl.4          fit_nec_ogl min_ess_ratio     1.53028679999495
+fit_nec_ogl.5          fit_nec_ogl   n_divergent     7.16434441736539
+fit_nec_ogl.6          fit_nec_ogl        failed     7.15987004418337
+fit_nec_ogl.7          fit_nec_ogl         model 0.000895543052170674
+fit_nec_ogl.8          fit_nec_ogl      max_rhat 0.000894983755522921
+fit_nec_ogl.9          fit_nec_ogl       min_ess                    0
+fit_nec_ogl.10         fit_nec_ogl min_ess_ratio                    0
+fit_nec_ogl.11         fit_nec_ogl   n_divergent                 TRUE
+fit_nec_ogl.12         fit_nec_ogl        failed                 TRUE
+fit_nec_gl.1            fit_nec_gl         model            nec3param
+fit_nec_gl.2            fit_nec_gl      max_rhat            nec4param
+fit_nec_gl.3            fit_nec_gl       min_ess     1.00601434369182
+fit_nec_gl.4            fit_nec_gl min_ess_ratio     1.00362087797433
+fit_nec_gl.5            fit_nec_gl   n_divergent      800.19270504971
+fit_nec_gl.6            fit_nec_gl        failed     1036.85196448307
+fit_nec_gl.7            fit_nec_gl         model    0.100024088131214
+fit_nec_gl.8            fit_nec_gl      max_rhat    0.129606495560384
+fit_nec_gl.9            fit_nec_gl       min_ess                    0
+fit_nec_gl.10           fit_nec_gl min_ess_ratio                    0
+fit_nec_gl.11           fit_nec_gl   n_divergent                FALSE
+fit_nec_gl.12           fit_nec_gl        failed                FALSE
+
+==  pareto  ==
+                               fit       model         wi   n k_gt_0.7  k_max
+fit_pooled.1            fit_pooled   nec3param  1.925e-11 748        0 0.2015
+fit_pooled.2            fit_pooled   nec4param  4.223e-12 748        0 0.1840
+fit_pooled.3            fit_pooled    nechorme  1.939e-11 748        0 0.1873
+fit_pooled.4            fit_pooled   nechorme4  4.354e-12 748        0 0.2860
+fit_pooled.5            fit_pooled      ecxexp 7.464e-151 748        0 0.1864
+fit_pooled.6            fit_pooled   ecx4param  1.147e-02 748        0 0.1864
+fit_pooled.7            fit_pooled      ecxwb1  3.163e-01 748        0 0.1977
+fit_pooled.8            fit_pooled      ecxwb2  3.023e-07 748        0 0.1043
+fit_pooled.9            fit_pooled    ecxwb1p3  3.639e-06 748        0 0.1312
+fit_pooled.10           fit_pooled    ecxwb2p3  1.200e-06 748        0 0.1574
+fit_pooled.11           fit_pooled      ecxll5  5.706e-01 748        0 0.2071
+fit_pooled.12           fit_pooled      ecxll4  1.188e-02 748        0 0.2457
+fit_pooled.13           fit_pooled      ecxll3  4.427e-02 748        0 0.1161
+fit_pooled.14           fit_pooled ecxhormebc4  4.555e-02 748        0 0.1767
+fit_plate.1              fit_plate   nec3param 3.447e-109 748        0 0.3113
+fit_plate.2              fit_plate   nec4param 6.628e-110 748        0 0.4158
+fit_plate.3              fit_plate    nechorme 3.029e-114 748        0 0.4499
+fit_plate.4              fit_plate   nechorme4 6.284e-110 748        0 0.3507
+fit_plate.5              fit_plate      ecxexp  0.000e+00 748        0 0.4555
+fit_plate.6              fit_plate   ecx4param  1.340e-08 748        0 0.2538
+fit_plate.7              fit_plate      ecxwb1  1.000e+00 748        0 0.2532
+fit_plate.8              fit_plate      ecxwb2 2.246e-129 748        0 0.2711
+fit_plate.9              fit_plate    ecxwb1p3  2.247e-68 748        0 0.2591
+fit_plate.10             fit_plate    ecxwb2p3  4.414e-37 748        0 0.3015
+fit_plate.11             fit_plate      ecxll5 1.201e-218 748        0 0.3461
+fit_plate.12             fit_plate      ecxll4 4.015e-104 748        0 0.2691
+fit_plate.13             fit_plate      ecxll3  2.538e-08 748        0 0.2768
+fit_plate.14             fit_plate ecxhormebc4  1.856e-08 748        0 0.2700
+fit_pgl.1                  fit_pgl   nec3param 1.888e-169 748        2 2.8051
+fit_pgl.2                  fit_pgl   nec4param 6.169e-206 748        2 0.7106
+fit_pgl.3                  fit_pgl    nechorme 3.656e-217 748        9 2.1912
+fit_pgl.4                  fit_pgl   nechorme4 2.828e-172 748        1 1.2205
+fit_pgl.5                  fit_pgl      ecxexp  0.000e+00 748        0 0.5822
+fit_pgl.6                  fit_pgl   ecx4param  9.594e-44 748        0 0.4729
+fit_pgl.7                  fit_pgl      ecxwb1 1.145e-192 748        4 0.8619
+fit_pgl.8                  fit_pgl      ecxwb2  2.325e-91 748        0 0.4760
+fit_pgl.9                  fit_pgl    ecxwb1p3 5.097e-250 748        0 0.6150
+fit_pgl.10                 fit_pgl    ecxwb2p3 2.858e-214 748        0 0.5335
+fit_pgl.11                 fit_pgl      ecxll5  1.000e+00 748        0 0.5597
+fit_pgl.12                 fit_pgl      ecxll4  1.303e-43 748        0 0.4412
+fit_pgl.13                 fit_pgl      ecxll3  7.598e-44 748        0 0.4492
+fit_pgl.14                 fit_pgl ecxhormebc4  1.349e-43 748        0 0.4539
+fit_batch.1              fit_batch   nec3param  1.181e-16 748        0 0.1447
+fit_batch.2              fit_batch   nec4param  5.076e-17 748        0 0.1309
+fit_batch.3              fit_batch    nechorme  1.185e-16 748        0 0.1747
+fit_batch.4              fit_batch   nechorme4  4.255e-17 748        0 0.1768
+fit_batch.5              fit_batch      ecxexp 2.864e-194 748        0 0.1783
+fit_batch.6              fit_batch   ecx4param  1.745e-03 748        0 0.1687
+fit_batch.7              fit_batch      ecxwb1  4.095e-01 748        0 0.2109
+fit_batch.8              fit_batch      ecxwb2  2.880e-10 748        0 0.1662
+fit_batch.9              fit_batch    ecxwb1p3  4.341e-13 748        0 0.2454
+fit_batch.10             fit_batch    ecxwb2p3  5.580e-10 748        0 0.2220
+fit_batch.11             fit_batch      ecxll5  5.802e-01 748        0 0.1994
+fit_batch.12             fit_batch      ecxll4  1.924e-03 748        0 0.2239
+fit_batch.13             fit_batch      ecxll3  3.395e-03 748        0 0.1451
+fit_batch.14             fit_batch ecxhormebc4  3.328e-03 748        0 0.1728
+fit_plate_batch.1  fit_plate_batch   nec3param 1.898e-113 748        0 0.3472
+fit_plate_batch.2  fit_plate_batch   nec4param 3.191e-116 748        0 0.4057
+fit_plate_batch.3  fit_plate_batch    nechorme 1.740e-115 748        0 0.3884
+fit_plate_batch.4  fit_plate_batch   nechorme4 1.501e-111 748        0 0.4672
+fit_plate_batch.5  fit_plate_batch      ecxexp  0.000e+00 748        0 0.4460
+fit_plate_batch.6  fit_plate_batch   ecx4param  2.008e-12 748        0 0.2526
+fit_plate_batch.7  fit_plate_batch      ecxwb1  1.424e-01 748        0 0.2497
+fit_plate_batch.8  fit_plate_batch      ecxwb2  2.524e-40 748        0 0.2575
+fit_plate_batch.9  fit_plate_batch    ecxwb1p3  3.850e-69 748        0 0.2659
+fit_plate_batch.10 fit_plate_batch    ecxwb2p3  8.000e-40 748        0 0.2243
+fit_plate_batch.11 fit_plate_batch      ecxll5  8.576e-01 748        0 0.2602
+fit_plate_batch.12 fit_plate_batch      ecxll4  1.404e-12 748        0 0.2741
+fit_plate_batch.13 fit_plate_batch      ecxll3  1.827e-12 748        0 0.2735
+fit_plate_batch.14 fit_plate_batch ecxhormebc4  2.563e-12 748        0 0.2591
+fit_nec_ogl.1          fit_nec_ogl   nec3param  8.769e-01 748        0 0.3113
+fit_nec_ogl.2          fit_nec_ogl   nec4param  1.231e-01 748        0 0.4158
+fit_nec_gl.1            fit_nec_gl   nec3param  3.363e-01 748        0 0.3817
+fit_nec_gl.2            fit_nec_gl   nec4param  6.637e-01 748        1 0.7278
+
