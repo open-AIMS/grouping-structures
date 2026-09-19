@@ -99,3 +99,22 @@ Section 12 rule 6 of the global file, and `bayesnec/CLAUDE.md` for the specifics
 model" never identifies one: name `nec3param`, `nec4param` or `ecxll3`.
 `bayesnec` and `brms` are packages; `bnec()`, `bnec_group()` and `brm()` are
 functions.
+
+## A joint refit can go stale without changing its key
+
+`bnec_joint()` is keyed on its own call and the key of the fit it refits, and
+neither changes when `bayesnec` changes how a joint refit is built. The package
+version does not catch it either: the per-level-equation correction of #388 and
+the one-equation implementation before it are both 2.1.3.39, so
+`assemble_store.R`'s version comparison sees nothing. `run_joint.R` then skips
+the refit because its store file exists, and the render reads a fit built by
+code that no longer exists.
+
+Nothing detects this. Delete the joint refit's `.rds` from the store, on the
+cluster and locally, whenever `bnec_joint()` itself changes, and let the job
+rebuild it. Measured on 2026-09-19: the herbicide refit was rebuilt this way
+after the correction, and the stale file would otherwise have been kept.
+
+The unit fits do not have this problem to the same degree, because a change to
+how an equation is fitted usually changes the package version, and
+`assemble_store.R` refuses a set whose units disagree on it.
