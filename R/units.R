@@ -100,6 +100,13 @@ group_weights_method <- function(cl, env) {
 ## The units one fit call divides into. Returned as a data frame so the manifest
 ## is one table and an array task is one row of it.
 plan_units <- function(cl, fn_name, data, env) {
+  if (fn_name %in% FIT_FUNS_ON_FIT) {
+    # Not an array task at all. A joint refit needs its prerequisite fitted and
+    # assembled first, and no task in the units array can depend on another, so
+    # it runs after the assembly from analysis/run_joint.R.
+    stop("a joint refit is not divided into units and does not run in the ",
+         "array; see analysis/run_joint.R.", call. = FALSE)
+  }
   if (identical(fn_name, "bnec")) {
     models <- expand_model_set(cl$formula, data, cl$family, cl$prior_type, env)
     data.frame(level = NA_character_, model = models, stringsAsFactors = FALSE)
@@ -127,13 +134,30 @@ plan_units <- function(cl, fn_name, data, env) {
 
 ## Run one unit and return the fit.
 ##
-## The call is the vignette's own, with two changes and no others: the formula's
+## A joint refit is the third shape this handles. It has no units to divide into
+## and no data of its own, so the call is evaluated whole with the fit it refits
+## bound in; `prereq` is that fit, loaded from the store by run_joint.R.
+##
+## Otherwise the call is the vignette's own, with two changes and no others: the formula's
 ## model set is narrowed to this unit's equation, and where the call was a
 ## bnec_group() one the data is narrowed to this unit's level and the family is
 ## passed explicitly. Everything else -- chains, iter, warmup, seed, adapt_delta,
 ## the priors bayesnec derives -- is left exactly as the vignette wrote it, which
 ## is what makes the stored fit the fit the vignette's visible code describes.
-run_unit <- function(cl, fn_name, data, env, level = NA, model = NA, plan = NULL) {
+run_unit <- function(cl, fn_name, data, env, level = NA, model = NA, plan = NULL,
+                     prereq = NULL) {
+  if (fn_name %in% FIT_FUNS_ON_FIT) {
+    # The one substitution a joint refit needs. The call is otherwise the
+    # vignette's own, and the object it names is bound to the fit the store
+    # holds under the key the manifest recorded as this call's prerequisite --
+    # which the vignette's own prefix cannot produce, because the prefix skips
+    # every fitting call.
+    jcl <- cl
+    jcl$object <- quote(.prereq_fit)
+    jenv <- new.env(parent = env)
+    assign(".prereq_fit", prereq, envir = jenv)
+    return(eval(jcl, jenv))
+  }
   if (!identical(fn_name, "bnec") && !identical(fn_name, "bnec_group")) {
     return(eval(cl, env))
   }

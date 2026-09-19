@@ -24,6 +24,14 @@ incomplete <- character(0)
 
 for (key in names(mf$calls)) {
   info <- mf$calls[[key]]
+  # A joint refit is not assembled from units: it is one model, and it cannot be
+  # fitted until the fit it refits is in the store. analysis/run_joint.R fits it
+  # afterwards and adds its row to the index.
+  if (isTRUE(info$fn %in% FIT_FUNS_ON_FIT)) {
+    message("\n--- ", info$target, " (", key, ") joint refit, run after this ",
+            "by analysis/run_joint.R")
+    next
+  }
   rows <- mf$units[mf$units$key == key, , drop = FALSE]
   paths <- mapply(unit_path, MoreArgs = list(root = unit_dir),
                   key = rows$key, level = rows$level, model = rows$model)
@@ -139,6 +147,10 @@ for (key in names(mf$calls)) {
     call = info$call_text, stringsAsFactors = FALSE)
 }
 
+# index.csv is rewritten from scratch, so any joint refit row a previous
+# analysis/run_joint.R appended is dropped here and added back when that script
+# runs again behind this one. The order of the chain is what keeps the two
+# writers from disagreeing.
 if (length(index)) {
   write.csv(do.call(rbind, index), file.path(store, "index.csv"),
             row.names = FALSE)

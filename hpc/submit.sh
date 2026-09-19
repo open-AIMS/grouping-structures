@@ -1,13 +1,16 @@
 #!/bin/bash
-# Submit the study: install and gate, then the fitting array, then the assembly.
+# Submit the study: install and gate, the fitting array, the assembly, and the
+# joint refits.
 #
 #   ./hpc/submit.sh [MAX_RESIDENT]
 #
-# Three jobs chained on afterok. The array waits on the install because nothing
-# should sample until bayesnec is installed, the manifest is built against the
-# deployed vignette, and the keys have been checked against it. The assembly
-# waits on the array because a store assembled from part of a model set would be
-# a different model average with nothing to say so.
+# Four jobs chained. The array waits on the install because nothing should sample
+# until bayesnec is installed, the manifest is built against the deployed
+# vignette, and the keys have been checked against it. The assembly waits on the
+# array because a store assembled from part of a model set would be a different
+# model average with nothing to say so. The joint refits wait on the assembly
+# because bnec_joint() is handed the assembled object, not the units it was
+# assembled from.
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
@@ -46,6 +49,15 @@ echo "units:          $UNITS  ($N tasks, $MAX_RESIDENT resident)"
 # short a unit, and reports which. Let it run and say so.
 ASSEMBLE=$(sbatch --parsable --dependency=afterany:"$UNITS" hpc/run.assemble)
 echo "assemble:       $ASSEMBLE"
+
+# afterok here, not afterany. A joint refit reads its prerequisite out of the
+# store, so an assembly that did not finish leaves nothing to read; run_joint.R
+# would stop on the missing file, and a job that cannot start is the clearer
+# report. Submitted unconditionally: the manifest is built inside run.install, so
+# this script cannot yet know whether the vignette has a joint refit in it, and
+# run_joint.R exits zero saying so when it has none.
+JOINT=$(sbatch --parsable --dependency=afterok:"$ASSEMBLE" hpc/run.joint)
+echo "joint refits:   $JOINT"
 
 cat <<TXT
 

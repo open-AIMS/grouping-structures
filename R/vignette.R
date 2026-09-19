@@ -83,6 +83,47 @@ fit_call_of <- function(e) {
   if (!is.na(fit_fun_name(e))) e else NULL
 }
 
+## The variable a joint refit was handed, as a plain string.
+##
+## bnec_joint() takes the object an earlier fit call in this vignette returned,
+## and the source holds only the symbol it was bound to. A symbol is
+## required rather than any expression: the compendium has to follow it back to
+## a call it planned units for, and `screen_models(fits_herb)` or a list element
+## is a step it has not been taught. Refusing by name is the point -- a joint
+## refit the manifest does not plan is one the render would sample during a
+## knit, which is the failure the store exists to prevent.
+prereq_var <- function(cl, fn_name = fit_fun_name(cl)) {
+  mcl <- match.call(get(fn_name, envir = asNamespace("bayesnec")), cl,
+                    expand.dots = TRUE)
+  obj <- mcl$object
+  if (is.null(obj) || !is.name(obj)) {
+    stop(fn_name, "() must be handed a variable that an earlier fit call in ",
+         "the vignette assigned.\n  call: ",
+         paste(deparse(cl, width.cutoff = 500L), collapse = " "),
+         call. = FALSE)
+  }
+  as.character(obj)
+}
+
+## The key of the fit a joint refit is handed, out of the calls already planned.
+##
+## `calls` is in vignette order and keyed by key, so the last entry whose target
+## is this variable is the binding in force at the joint call. A name that is
+## not the target of any earlier fit call stops the build: it is either a
+## rebinding the compendium cannot follow or a fit it did not plan, and both
+## would reach the render as a chunk that samples.
+prereq_key <- function(cl, fn_name, calls) {
+  var <- prereq_var(cl, fn_name)
+  hit <- Filter(function(ci) identical(ci$target, var), calls)
+  if (!length(hit)) {
+    stop(fn_name, "() is handed `", var, "`, which is not the target of any ",
+         "earlier fit call in the vignette.\n  fit calls so far: ",
+         paste(vapply(calls, `[[`, character(1L), "target"), collapse = ", "),
+         call. = FALSE)
+  }
+  hit[[length(hit)]]$key
+}
+
 assign_target <- function(e) {
   if (is.call(e) && as.character(e[[1L]])[1L] %in% c("<-", "=", "<<-")) {
     paste(deparse(e[[2L]]), collapse = "")

@@ -42,6 +42,37 @@ Rscript analysis/check_keys.R
 Only the units whose keys changed need refitting; `run_unit.R` skips a unit whose
 file exists, so resubmitting the whole array fits exactly the ones that changed.
 
+## A joint refit is keyed on its prerequisite
+
+`bnec_joint()` takes a fitted object rather than data, so its key is the
+normalised call plus the key of the fit it refits. `R/keys.R` names those
+functions in `FIT_FUNS_ON_FIT` and gives them `joint_key()` in place of
+`fit_key()`; `object` is dropped from the deparsed arguments the way `data`
+already is.
+
+The two sides reach the prerequisite's key by different routes.
+`analysis/build_manifest.R` follows the variable the call names back to the
+earlier fit call that assigned it, and refuses by name where there is none. The
+shim reads an attribute, `fit_store_key`, which it stamps on every object it
+returns.
+
+The key covers the two calls and not the code between them. A `bnec_joint()`
+call written after the `screen_models()` chunk that rebinds its prerequisite
+refits a different object and keys to the same string as one written before it,
+so the render would load a refit of the other object without saying so.
+`analysis/run_joint.R` closes that by binding the stored fit under the name its
+own call assigned *before* running the vignette prefix, so every step between
+the two calls runs on it there as it will at the render. Measured on the
+herbicide fit on 2026-09-19: refitting after `screen_models()` sees ten
+equations on simazine against the stored object's eleven, and both placements
+key to `38664a5ef3349e77`.
+
+A joint refit is not an array task. It needs its prerequisite fitted and then
+reassembled, and nothing in the units array can wait on another task, so it runs
+from `analysis/run_joint.R` in `hpc/run.joint`, chained behind `hpc/run.assemble`.
+`assemble_store.R` skips it and rewrites `index.csv` without it; `run_joint.R`
+adds its row back.
+
 ## The shim is generated
 
 `shim/fit_store.R` is written by `analysis/build_shim.R` from `R/keys.R` and

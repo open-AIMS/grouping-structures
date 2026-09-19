@@ -36,6 +36,11 @@ source("shim/fit_store.R")
 asked <- character(0)
 # The placeholders are empty, so the shim's readRDS would fail on the value it
 # never uses here. Intercepted to record the key and hand back a marker.
+#
+# The marker carries no key attribute of its own. The shim stamps every object
+# it returns after reading it, so a joint refit downstream reads the same
+# attribute here as it would at a render -- which is what makes this check cover
+# the joint path rather than a convenience arranged for it.
 assign("readRDS", function(file, ...) {
   key <- sub("\\.rds$", "", basename(file))
   asked <<- c(asked, key)

@@ -44,19 +44,59 @@ fit_store_shim <- function(fn_name, store) {
     caller <- parent.frame()
     def <- get(fn_name, envir = asNamespace("bayesnec"))
     mcl <- match.call(def, cl, expand.dots = TRUE)
-    if (is.null(mcl$data)) {
-      stop("the fit store needs `data` named or matched in the call to ",
-           fn_name, "().", call. = FALSE)
+    key <- if (fn_name %in% FIT_FUNS_ON_FIT) {
+      joint_key(cl, fit_store_prereq_key(mcl, fn_name, caller), fn_name)
+    } else {
+      if (is.null(mcl$data)) {
+        stop("the fit store needs `data` named or matched in the call to ",
+             fn_name, "().", call. = FALSE)
+      }
+      fit_key(cl, eval(mcl$data, caller), fn_name)
     }
-    data <- eval(mcl$data, caller)
-    key <- fit_key(cl, data, fn_name)
     path <- file.path(store, paste0(key, ".rds"))
     if (!file.exists(path)) {
       fit_store_miss(key, cl, fn_name, store)
     }
     message("fit store: ", key, " <- ", basename(path))
-    readRDS(path)
+    # Every object the store hands back is stamped with the key it came from, so
+    # that a later call which refits it can name its prerequisite without being
+    # told. The compendium reaches the same key by following the variable back to
+    # the earlier fit call in the vignette source, which is a different route to
+    # the same string -- and two routes that agree is the property the whole
+    # store rests on.
+    obj <- readRDS(path)
+    attr(obj, "fit_store_key") <- key
+    obj
   }
+}
+
+## The key of the fit a joint refit was handed.
+##
+## Read off the object rather than off the symbol, because the symbol is not
+## evidence: a variable rebound between the grouped fit and the joint refit would
+## still be called `fits_herb`. The stamp is only on an object this shim
+## returned, so a missing one means the fit reaching bnec_joint() is not the one
+## the compendium planned against, and that is reported rather than guessed
+## around.
+fit_store_prereq_key <- function(mcl, fn_name, caller) {
+  if (is.null(mcl$object)) {
+    stop("the fit store needs `object` named or matched in the call to ",
+         fn_name, "().", call. = FALSE)
+  }
+  obj <- eval(mcl$object, caller)
+  dep <- attr(obj, "fit_store_key")
+  if (is.null(dep)) {
+    stop("the fit handed to ", fn_name, "() did not come from the fit store.\n",
+         "  object: ", paste(deparse(mcl$object, width.cutoff = 500L),
+                             collapse = " "), "\n",
+         "  A joint refit is keyed on the key of the fit it refits, so that fit\n",
+         "  has to be one the store answered. It is not, which means something\n",
+         "  between the two calls returned a new object -- screen_models() and\n",
+         "  amend() both do. Refit jointly from the object the fitting call\n",
+         "  returned, or teach the compendium about the step in between.",
+         call. = FALSE)
+  }
+  dep
 }
 
 ## A miss is reported with everything needed to find the cause: the key, the

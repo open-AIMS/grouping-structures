@@ -1,0 +1,37 @@
+#!/bin/bash
+#SBATCH --job-name=grp-joint
+#SBATCH --partition=cpuq
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=32GB
+#SBATCH --time=12:00:00
+#SBATCH --output=logs/grp-joint-%j.log
+
+# The vignette's joint refits, on a dependency behind the assembly.
+#
+# bnec_joint() is handed the object bnec_group() returned, so it cannot run in
+# the units array: every task there is independent by construction, and this one
+# needs its prerequisite fitted and then reassembled. It runs here, reading the
+# prerequisite out of the store.
+#
+# --cpus-per-task=4 for the same reason as run.units: a joint refit is one
+# model, so its four chains are the only parallelism within it.
+#
+# --time=12:00:00 is not a measurement. A joint refit fits one equation with a
+# value of every curve parameter per level, which on seven herbicides is seven
+# times the parameters of the equation and a single Stan program rather than
+# seven; how that compares with a per-level fit has not been measured on this
+# cluster. Revise it once the first run has reported; run_joint.R records the
+# minutes of every refit.
+#
+# Idempotent: a refit whose store file exists is skipped.
+
+set -euo pipefail
+STUDY="${GRP_STUDY:-/export/scratch/$USER/grouping-structures}"
+source "$STUDY/hpc/job-common.sh"
+
+grp_check_bayesnec
+grp_r analysis/run_joint.R
+echo "=== $(date -Is) store:"
+ls -la store/

@@ -72,6 +72,30 @@ One unit is one equation of one model set, on one level where the call is a
 A call that cannot be decomposed runs whole, as one task. It is still fitted in
 parallel with every other call; it simply does not divide further.
 
+## A joint refit
+
+`bnec_joint()` refits a `bayesnecgroupfit` as one model with each curve
+parameter given a value per level. What it is handed is not data but the object
+an earlier call in the same vignette produced, so it sits outside the array in
+two ways.
+
+Its key is derived from the normalised call and from the key of the fit it
+refits, rather than from a digest of `data`. The dependency is part of the
+identity: a change to the `bnec_group()` call changes that call's key, and the
+joint refit's key changes with it, so the render stops at the joint chunk rather
+than loading a refit of the previous draft. The compendium reaches the
+prerequisite's key by following the variable the call names back to the earlier
+fit call in the vignette source; the shim reaches it by reading an attribute
+that every object the store hands back is stamped with. Two routes to the same
+string, which is what `analysis/check_keys.R` tests.
+
+It is also not an array task. It needs its prerequisite fitted and then
+reassembled, and no task in the units array can wait on another, so it runs in a
+job of its own chained behind the assembly. `analysis/run_joint.R` reads the
+prerequisite out of the store, binds it under the name the vignette assigned,
+runs the vignette's own steps between the two calls -- `screen_models()` is the
+one example8 applies -- and evaluates the joint call.
+
 ## The route back to a model average
 
 `R/assemble.R` reaches `expand_manec()` directly, which is the call `bnec()`
@@ -126,13 +150,14 @@ cp hpc/local.conf.example hpc/local.conf   # gitignored; edit it
 `deploy.sh` exports `bayesnec` at the ref `hpc/local.conf` names, records the
 commit in `hpc/bayesnec.lock`, syncs both trees, copies the container if the
 cluster does not already hold the one `hpc/image.lock` records, and submits.
-`submit.sh` then chains three jobs:
+`submit.sh` then chains four jobs:
 
 | job | tasks | what it does |
 |---|---|---|
 | `run.install` | 1 | installs `bayesnec`, builds the manifest against the deployed vignette, and runs the key check as a gate |
 | `run.units` | 189 | one equation each, on a dependency behind the gate |
 | `run.assemble` | 1 | reassembles the nine objects and writes the store |
+| `run.joint` | 1 | fits any `bnec_joint()` call from the assembled store |
 
 The array is idempotent: a unit whose file exists is skipped, so a timed-out
 subset is recovered by resubmitting the same array.
@@ -176,5 +201,6 @@ this.
 | `analysis/check_keys.R` | the gate: the shim must ask for the manifest's keys |
 | `analysis/run_unit.R` | fit one unit |
 | `analysis/assemble_store.R` | assemble the store |
+| `analysis/run_joint.R` | fit the joint refits, after the store is assembled |
 | `analysis/build_shim.R` | generate `shim/fit_store.R` for copying into `bayesnec` |
 | `shim/fit_store.R` | generated; belongs in `bayesnec/vignettes/` |
