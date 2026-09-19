@@ -13,3 +13,4 @@
 "e4ccb13c87537bc1","three_par","bnec","fit-par-count",2,"bayesmanecfit",22.6,"bnec(proportion ~ crf(log(diuron_adj), c(""ecxll3"", ""ecxwb1p3"")) + ogl(chamber), data = coral_colour, family = Beta(link = ""identity""), seed = 228, refresh = 0)"
 "217ac6fbd4970aba","four_par","bnec","fit-par-count",2,"bayesmanecfit",22.1,"bnec(proportion ~ crf(log(diuron_adj), c(""nec4param"", ""ecx4param"")) + ogl(chamber), data = coral_colour, family = Beta(link = ""identity""), seed = 228, refresh = 0)"
 "feb7d1d3f692bf8d","fits_herb","bnec_group","fit-herbicides",77,"bayesnecgroupfit",63.8,"bnec_group(fvfm ~ crf(log(concentration), ""decline""), data = herbicide, group_var = ""herbicide"", family = Beta(link = ""identity""), seed = 228, refresh = 0)"
+"38664a5ef3349e77","herb_joint","bnec_joint","fit-herb-joint",1,"bayesnecjointfit",11.7,"bnec_joint(fits_herb, seed = 228, refresh = 0)"
