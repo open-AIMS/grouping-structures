@@ -77,6 +77,7 @@ grp_r() {
     "${RENV[@]}" --env GRP_STAN_CACHE="$CACHE" \
     --env GRP_UNITS="${GRP_UNITS:-units}" \
     --env GRP_STORE="${GRP_STORE:-store}" \
+    --env GRP_ASSEMBLE_RESUME="${GRP_ASSEMBLE_RESUME:-0}" \
     --env SLURM_CPUS_PER_TASK="${SLURM_CPUS_PER_TASK:-4}" \
     "$SIF" Rscript "$@"
 }

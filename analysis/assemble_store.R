@@ -33,6 +33,19 @@ for (key in names(mf$calls)) {
     next
   }
   rows <- mf$units[mf$units$key == key, , drop = FALSE]
+  # GRP_ASSEMBLE_RESUME=1 keeps a set an interrupted assembly already wrote to
+  # this store. Use it only when the package the sets were assembled by is
+  # unchanged in what assembly computes.
+  p <- store_path(store, key)
+  if (identical(Sys.getenv("GRP_ASSEMBLE_RESUME"), "1") && file.exists(p)) {
+    message("\n--- ", info$target, " (", key, ") already in ", store, ", kept")
+    index[[length(index) + 1L]] <- data.frame(
+      key = key, target = info$target, fn = info$fn, chunk = info$chunk,
+      n_units = nrow(rows), class = class(readRDS(p))[1L],
+      mb = round(file.size(p) / 1e6, 1L),
+      call = info$call_text, stringsAsFactors = FALSE)
+    next
+  }
   paths <- mapply(unit_path, MoreArgs = list(root = unit_dir),
                   key = rows$key, level = rows$level, model = rows$model)
   have <- file.exists(paths)
