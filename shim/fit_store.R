@@ -609,6 +609,7 @@ post_store_compute <- function(thunk, seed, x) {
   close(con)
   sunk <- FALSE
   take_output(post_out)
+  if (inherits(res$value, "ggplot")) post_store_settle_plot(res$value)
   list(value = res$value, visible = res$visible,
        same_as_input = identical(res$value, x), events = events,
        namespaces = setdiff(loadedNamespaces(), ns0),
@@ -636,6 +637,22 @@ post_store_isolated <- function(seed, expr) {
              sample.kind = "Rejection")
   }
   expr
+}
+
+## Force every promise in the environments a plot evaluates in. autoplot()
+## leaves arguments it never used as promises on its own frame, which holds the
+## whole model set, and a stored plot would otherwise carry that set with it.
+post_store_settle_plot <- function(p) {
+  envs <- list(p$plot_env)
+  for (q in c(p$mapping, unlist(lapply(p$layers, function(l) l$mapping)))) {
+    envs[[length(envs) + 1L]] <- environment(q)
+  }
+  for (e in unique(Filter(is.environment, envs))) {
+    for (n in setdiff(ls(e, all.names = TRUE), "...")) {
+      tryCatch(get(n, envir = e), error = function(err) NULL)
+    }
+  }
+  invisible(p)
 }
 
 post_store_options_diff <- function(before, after) {
