@@ -104,3 +104,30 @@ unit_path <- function(root, key, level, model) {
 }
 
 store_path <- function(root, key) file.path(root, paste0(key, ".rds"))
+
+## bnec() attaches the version each equation was fitted by and the arguments
+## the set was expanded with. A set assembled from units needs both: without
+## them summary() names no version, and screen_models() and amend() rebuild the
+## set without knowing how its weights were computed.
+attach_unit_records <- function(fit, units) {
+  units <- Filter(Negate(is.null), units)
+  versions <- do.call(rbind, lapply(units, attr, "bnec_version"))
+  fit <- bayesnec:::attach_version(fit, versions)
+  bayesnec:::attach_expand_args(fit, attr(units[[1L]], "bnec_expand_args"))
+}
+
+## The same records for a set a resumed assembly kept, where it has none: each
+## level of a grouped fit is given the records of its own units.
+add_missing_records <- function(fit, units, levels) {
+  if (inherits(fit, "bayesnecgroupfit")) {
+    for (i in seq_along(fit$fits)) {
+      if (is.null(attr(fit$fits[[i]], "bnec_expand_args"))) {
+        fit$fits[[i]] <- attach_unit_records(
+          fit$fits[[i]], units[levels == fit$levels[i]])
+      }
+    }
+  } else if (is.null(attr(fit, "bnec_expand_args"))) {
+    fit <- attach_unit_records(fit, units)
+  }
+  fit
+}

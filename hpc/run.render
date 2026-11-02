@@ -1,0 +1,49 @@
+#!/bin/bash
+#SBATCH --job-name=grp-render
+#SBATCH --partition=cpuq
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=96GB
+#SBATCH --time=16:00:00
+#SBATCH --output=logs/grp-render-%j.log
+#
+# Renders example8 from the store, in the exported bayesnec source and against
+# the job library, behind the assembly and the joint refit. Every fit is read
+# from the store, but screen_models(), summary(), ecx() and nsec() still run
+# over every draw of every equation; a render on a workstation took six hours.
+#
+# The rendered .Rmd and the figures this run wrote are staged in
+# render/<store>/ with a STAMP naming the bayesnec commit. Fetch them from
+# there: the next deploy replaces bayesnec-src/.
+
+set -euo pipefail
+STUDY="${GRP_STUDY:-/export/scratch/$USER/grouping-structures}"
+source "$STUDY/hpc/job-common.sh"
+
+grp_check_bayesnec
+STORE_DIR="$STUDY/${GRP_STORE:-store}"
+OUT="$STUDY/render/${GRP_STORE:-store}"
+STARTED="$STUDY/logs/grp-render-started-${SLURM_JOB_ID:-single}"
+touch "$STARTED"
+
+singularity exec -B "$STUDY":"$STUDY" --pwd "$SRC" "${RENV[@]}" \
+  --env BAYESNEC_PRECOMPILE_PACKAGE=installed \
+  --env BAYESNEC_STAN_CACHE="$CACHE" \
+  --env BAYESNEC_FIT_STORE="$STORE_DIR" \
+  --env SLURM_CPUS_PER_TASK="${SLURM_CPUS_PER_TASK:-8}" \
+  "$SIF" Rscript vignettes/precompile.R example8
+
+# Reached only when precompile.R exited zero, which it does not where a chunk
+# errored.
+rm -rf "$OUT"; mkdir -p "$OUT"
+cp "$SRC/vignettes/example8.Rmd" "$OUT/"
+find "$SRC/vignettes" -name 'vignette-fig-*.png' -newer "$STARTED" \
+  -exec cp {} "$OUT/" \;
+{
+  echo "job: ${SLURM_JOB_ID:-none}"
+  grep -E '^(ref|commit): ' hpc/bayesnec.lock
+  echo "store: $STORE_DIR"
+  echo "finished: $(date -Is)"
+} > "$OUT/STAMP"
+echo "=== $(date -Is) staged $(ls "$OUT" | wc -l) file(s) in $OUT"

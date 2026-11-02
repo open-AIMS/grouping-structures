@@ -59,6 +59,12 @@ for (i in order(jt$expr_index)) {
           mf$calls[[info$depends_on]]$target, " (", info$depends_on, ")")
   if (file.exists(out)) {
     message("    already fitted: ", out)
+    # Recorded all the same: a resumed assembly rewrites index.csv without it.
+    rows[[length(rows) + 1L]] <- data.frame(
+      key = key, target = info$target, fn = info$fn, chunk = info$chunk,
+      n_units = 1L, class = class(readRDS(out))[1L],
+      mb = round(file.size(out) / 1e6, 1L),
+      call = info$call_text, stringsAsFactors = FALSE)
     next
   }
 

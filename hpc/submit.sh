@@ -58,6 +58,8 @@ echo "assemble:       $ASSEMBLE"
 # run_joint.R exits zero saying so when it has none.
 JOINT=$(sbatch --parsable --dependency=afterok:"$ASSEMBLE" hpc/run.joint)
 echo "joint refits:   $JOINT"
+RENDER=$(sbatch --parsable --dependency=afterok:"$JOINT" hpc/run.render)
+echo "render:         $RENDER"
 
 cat <<TXT
 

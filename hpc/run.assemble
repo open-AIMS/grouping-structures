@@ -25,4 +25,4 @@ source "$STUDY/hpc/job-common.sh"
 
 grp_r analysis/assemble_store.R
 echo "=== $(date -Is) store:"
-ls -la store/
+ls -la "${GRP_STORE:-store}/"

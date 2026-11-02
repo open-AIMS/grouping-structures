@@ -39,9 +39,20 @@ for (key in names(mf$calls)) {
   p <- store_path(store, key)
   if (identical(Sys.getenv("GRP_ASSEMBLE_RESUME"), "1") && file.exists(p)) {
     message("\n--- ", info$target, " (", key, ") already in ", store, ", kept")
+    kept <- readRDS(p)
+    paths <- mapply(unit_path, MoreArgs = list(root = unit_dir),
+                    key = rows$key, level = rows$level, model = rows$model)
+    if (all(file.exists(paths))) {
+      units <- lapply(lapply(paths, readRDS), `[[`, "fit")
+      with_records <- add_missing_records(kept, units, rows$level)
+      if (!identical(with_records, kept)) {
+        saveRDS(with_records, p)
+        message("    records attached")
+      }
+    }
     index[[length(index) + 1L]] <- data.frame(
       key = key, target = info$target, fn = info$fn, chunk = info$chunk,
-      n_units = nrow(rows), class = class(readRDS(p))[1L],
+      n_units = nrow(rows), class = class(kept)[1L],
       mb = round(file.size(p) / 1e6, 1L),
       call = info$call_text, stringsAsFactors = FALSE)
     next
@@ -121,11 +132,11 @@ for (key in names(mf$calls)) {
 
   fit <- if (identical(fn, "bnec")) {
     rec <- model_set_record(mcl$formula, data, mcl$family, env)
-    bayesnec:::attach_bnec_record(
+    attach_unit_records(bayesnec:::attach_bnec_record(
       bayesnec:::attach_failed_models(
         assemble_models(stats::setNames(units[ok], rows$model[ok]), call_args),
         failed),
-      rec$requested, rec$attempted, rec$excluded, subs)
+      rec$requested, rec$attempted, rec$excluded, subs), units[ok])
   } else if (identical(fn, "bnec_group")) {
     plan <- group_plan(mcl, data, env)
     level_fits <- lapply(plan$levels, function(lev) {
@@ -140,8 +151,10 @@ for (key in names(mf$calls)) {
       penv <- new.env(parent = env)
       assign(".plan_family", plan$family, envir = penv)
       rec <- model_set_record(mcl$formula, sub_data, quote(.plan_family), penv)
-      bayesnec:::attach_bnec_record(lf, rec$requested, rec$attempted,
-                                    rec$excluded, subs)
+      attach_unit_records(
+        bayesnec:::attach_bnec_record(lf, rec$requested, rec$attempted,
+                                      rec$excluded, subs),
+        units[sel])
     })
     names(level_fits) <- plan$levels
     assemble_group(level_fits, plan, mcl$formula, data, env)
