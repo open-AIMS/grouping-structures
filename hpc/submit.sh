@@ -1,10 +1,11 @@
 #!/bin/bash
-# Submit the study: install and gate, the fitting array, the assembly, and the
-# joint refits.
+# Submit the study: install and gate, the fitting array, the assembly, the
+# joint refits, the post-fit array and the render.
 #
 #   ./hpc/submit.sh [MAX_RESIDENT]
 #
-# Four jobs chained. The array waits on the install because nothing should sample
+# Five jobs chained here, and the post-fit array and the render submitted by
+# the last of them. The array waits on the install because nothing should sample
 # until bayesnec is installed, the manifest is built against the deployed
 # vignette, and the keys have been checked against it. The assembly waits on the
 # array because a store assembled from part of a model set would be a different
@@ -58,12 +59,16 @@ echo "assemble:       $ASSEMBLE"
 # run_joint.R exits zero saying so when it has none.
 JOINT=$(sbatch --parsable --dependency=afterok:"$ASSEMBLE" hpc/run.joint)
 echo "joint refits:   $JOINT"
-RENDER=$(sbatch --parsable --dependency=afterok:"$JOINT" hpc/run.render)
-echo "render:         $RENDER"
+
+# run.post sizes the post-fit array from the assembled store, so it submits the
+# array and the render itself.
+POST=$(sbatch --parsable --dependency=afterok:"$JOINT" hpc/run.post)
+echo "post-fit plan:  $POST  (submits the post-fit array and the render)"
 
 cat <<TXT
 
 watch:    squeue -u \$USER
 progress: ls units/*.rds | wc -l          # of $N
 store:    ls store/*.rds
+post:     ls store/post/*.rds | wc -l
 TXT

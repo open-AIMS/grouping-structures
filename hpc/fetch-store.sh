@@ -16,8 +16,11 @@ cd "$(dirname "${BASH_SOURCE[0]}")/.."
 HOST="${HOST:?set HOST in hpc/local.conf}"
 DEST="${DEST:-/export/scratch/${HOST%%@*}/grouping-structures}"
 
-mkdir -p store
-rsync -a --progress "$HOST:$DEST/store/" store/
+# GRP_STORE names the cluster's store directory, as it does for the jobs. The
+# post-fit results in its post/ directory come back with it.
+STORE="${GRP_STORE:-store}"
+mkdir -p "$STORE"
+rsync -a --progress "$HOST:$DEST/$STORE/" "$STORE/"
 rsync -a "$HOST:$DEST/manifest.rds" "$HOST:$DEST/manifest.csv" .
 
 if [ "${1:-}" = "--units" ]; then
@@ -27,7 +30,7 @@ fi
 
 echo
 echo "store:"
-ls -la store/
+ls -la "$STORE/"
 echo
 echo "Point the render at it:"
-echo "  export BAYESNEC_FIT_STORE=$(pwd)/store"
+echo "  export BAYESNEC_FIT_STORE=$(pwd)/$STORE"

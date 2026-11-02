@@ -1,0 +1,25 @@
+#!/bin/bash
+#SBATCH --job-name=grp-post-task
+#SBATCH --partition=cpuq
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=2
+#SBATCH --output=logs/grp-post-%A_%a.log
+#
+# One array task = the vignette's post-fit calls on one stored object, written
+# to <store>/post/. Submitted by hpc/run.post, which sets --mem and --time per
+# memory class from <store>/post/tasks.csv.
+#
+# --cpus-per-task=2: the calls run one after another, and only the leave-one-out
+# step inside a rebuild uses more than one core.
+#
+# Idempotent: a stored result is read back rather than recomputed.
+
+set -euo pipefail
+STUDY="${GRP_STUDY:-/export/scratch/$USER/grouping-structures}"
+source "$STUDY/hpc/job-common.sh"
+
+[ -f "$LIB/.installed" ] || {
+  echo "bayesnec is not installed in $LIB; run hpc/run.install first" >&2; exit 1; }
+
+grp_r analysis/run_post.R "$SLURM_ARRAY_TASK_ID"

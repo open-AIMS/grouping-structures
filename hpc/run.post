@@ -1,0 +1,40 @@
+#!/bin/bash
+#SBATCH --job-name=grp-post
+#SBATCH --partition=cpuq
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mem=4GB
+#SBATCH --time=00:30:00
+#SBATCH --output=logs/grp-post-%j.log
+#
+# Plans the post-fit array from the assembled store, submits one array per
+# memory class, and submits the render behind all of them. The arrays are
+# submitted from here because the memory each task needs is read from the
+# assembled store, which does not exist when submit.sh runs.
+#
+# afterany for the render: a task that failed leaves calls the render computes
+# and records itself.
+#
+# For a store that is already assembled, submit this job on its own:
+#   sbatch --export=ALL,GRP_STORE=<store> hpc/run.post
+
+set -euo pipefail
+STUDY="${GRP_STUDY:-/export/scratch/$USER/grouping-structures}"
+source "$STUDY/hpc/job-common.sh"
+
+grp_check_bayesnec
+grp_r analysis/plan_post.R
+POST_DIR="$STUDY/${GRP_STORE:-store}/post"
+
+deps=()
+while read -r mem hours ids; do
+  jid=$(sbatch --parsable --array="$ids" --mem="${mem}G" \
+          --time="${hours}:00:00" hpc/run.post-task)
+  echo "post tasks $ids: ${mem} GB, ${hours} h -> $jid"
+  deps+=("$jid")
+done < "$POST_DIR/classes.txt"
+
+dep=$(IFS=:; echo "${deps[*]}")
+RENDER=$(sbatch --parsable --dependency=afterany:"$dep" hpc/run.render)
+echo "render: $RENDER"

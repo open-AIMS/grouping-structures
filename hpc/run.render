@@ -9,9 +9,11 @@
 #SBATCH --output=logs/grp-render-%j.log
 #
 # Renders example8 from the store, in the exported bayesnec source and against
-# the job library, behind the assembly and the joint refit. Every fit is read
-# from the store, but screen_models(), summary(), ecx() and nsec() still run
-# over every draw of every equation; a render on a workstation took six hours.
+# the job library, behind the post-fit array that hpc/run.post submits. Every
+# fit is read from the store, and every post-fit call the array stored is read
+# from <store>/post/. A call the array did not reach is computed here and
+# recorded, so that a later render reads it too; post-log.tsv in the staged
+# output lists each call and whether it was read or computed.
 #
 # The rendered .Rmd and the figures this run wrote are staged in
 # render/<store>/ with a STAMP naming the bayesnec commit. Fetch them from
@@ -31,6 +33,8 @@ singularity exec -B "$STUDY":"$STUDY" --pwd "$SRC" "${RENV[@]}" \
   --env BAYESNEC_PRECOMPILE_PACKAGE=installed \
   --env BAYESNEC_STAN_CACHE="$CACHE" \
   --env BAYESNEC_FIT_STORE="$STORE_DIR" \
+  --env BAYESNEC_POST_STORE_RECORD=true \
+  --env BAYESNEC_POST_STORE_LOG="$STUDY/logs/grp-render-post-${SLURM_JOB_ID:-single}.tsv" \
   --env SLURM_CPUS_PER_TASK="${SLURM_CPUS_PER_TASK:-8}" \
   "$SIF" Rscript vignettes/precompile.R example8
 
@@ -40,6 +44,8 @@ rm -rf "$OUT"; mkdir -p "$OUT"
 cp "$SRC/vignettes/example8.Rmd" "$OUT/"
 find "$SRC/vignettes" -name 'vignette-fig-*.png' -newer "$STARTED" \
   -exec cp {} "$OUT/" \;
+cp "$STUDY/logs/grp-render-post-${SLURM_JOB_ID:-single}.tsv" "$OUT/post-log.tsv" \
+  2>/dev/null || true
 {
   echo "job: ${SLURM_JOB_ID:-none}"
   grep -E '^(ref|commit): ' hpc/bayesnec.lock

@@ -19,6 +19,12 @@ units/
 # beside it are small and are tracked.
 store/*.rds
 
+# The post-fit results hpc/run.post writes beside them: hundreds of files, some
+# the size of a model set. The task list, logs and MANIFEST in store/post/ are
+# small and are tracked.
+store/post/*.rds
+store/post/*.part*
+
 # Rebuilt by hpc/run.install against the deployed vignette, so a copy committed
 # from a workstation would be a fourth thing that can drift from the render.
 # manifest.csv is tracked as the readable record of the 189 units; the .rds it
