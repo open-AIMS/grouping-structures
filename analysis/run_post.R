@@ -48,6 +48,8 @@ options(width = 115,
         mc.cores = as.integer(Sys.getenv("SLURM_CPUS_PER_TASK", "1")))
 
 log_path <- file.path(store, "post", paste0("log-", key, ".tsv"))
+# The log is appended to by every run of this task; this run's lines follow.
+logged_before <- if (file.exists(log_path)) length(readLines(log_path)) else 0L
 Sys.setenv(BAYESNEC_POST_STORE = "replay", BAYESNEC_POST_STORE_RECORD = "true",
            BAYESNEC_POST_STORE_LOG = log_path)
 fit_store_install(store)
@@ -128,6 +130,7 @@ calls <- if (file.exists(log_path)) {
 } else {
   data.frame(how = character(0), secs = numeric(0))
 }
+calls <- calls[seq_len(nrow(calls)) > logged_before, , drop = FALSE]
 message(sprintf(paste0("\n%s: %d calls computed and stored, %d read back; ",
                        "%d expressions stopped (those reading other sets); ",
                        "%.1f min"),
