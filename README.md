@@ -140,6 +140,98 @@ even with a seed. `ASSEMBLY_SEED` in `R/assemble.R` is set immediately before
 each combination, which does not make the result equal to a monolithic run but
 does make this one repeatable.
 
+## Post-fit results
+
+Reading every fit from the store does not by itself make the render quick. The
+vignette's own calls on the fits rebuild model averages, recompute
+leave-one-out criteria and compute posterior predictions over every draw of
+every equation. With every fit read from `store-531`, a render took about six
+hours on a workstation and on the cluster.
+
+The calls were timed on a workstation on 2026-11-02, against `store-531` and
+`bayesnec` 2.1.3.44 at `16e666dd`, one call at a time. On the two smallest sets,
+`fit_plain` and `fit_ogl` (15 equations, 44 readings each), `screen_models()`
+took 99 and 131 s, `summary()` 93 s, `ecx()` 91 and 121 s, `autoplot()` 76 and
+104 s, and `pull_out()` of one equation 11 s. On `fit_cell` (15 equations, 748
+readings, 615 MB on disk) `screen_models()` took 204 s, `summary()` 194 s,
+`ecx()` 180 s and `pull_out()` 21 s, with a peak resident memory of 3.9 GB.
+These two comparisons suggest that the time depends more on the number of
+equations than on the number of readings. Most of the time `autoplot()` takes on
+a model set is spent in a complete `summary()`, computed only to label the
+no-effect line.
+
+The compendium therefore computes these calls once, on the cluster, and writes
+each result to `store/post/`. The shim answers the calls from there in the same
+way it answers the fit calls, and the vignette's visible code is unchanged. The
+calls answered are `screen_models()`, `summary()`, `check_sampling()`,
+`pull_out()`, `ecx()`, `nsec()`, `nec()`, `rhat()`, `compare_posterior()` and
+`autoplot()`, wherever the object they are handed came from the store.
+
+A result is filed under a key derived from the key of the object the call is
+handed, a digest of that object's weights and model list, the function, the
+values of its other arguments, and the `bayesnec` version. The object's key is
+the fit store's key, or the key of the post-fit call that returned it. For
+example, `fit <- screen_models(fit)` followed by `summary(fit)` keys the summary
+on the screened set. Each level of a `bnec_group()` fit is given a key of its own, so a
+call on `fits_tox$fits[[1]]` is answered as well. A call on an object without a
+key is run as written.
+
+Each answered call is evaluated under a seed derived from its key, and the
+render's random number stream is restored afterwards. `screen_models()` and
+`summary()` both draw random numbers: the first redraws the pseudo-BMA-BB
+weights of a rebuilt set, and the second draws the 200 posterior draws of its
+control check. Without the seed, a result would depend on every chunk before
+it, and no task in a session of its own could reproduce it. With it, a stored
+result is the result the render would compute, whichever session computed it,
+and a render that reads stored results produces the same output as one that
+computes them. The model weights and other averaged quantities in a render with
+the shim therefore differ from those of a render without it, in the way that a
+change of seed changes them.
+
+`hpc/run.post` submits one array task per stored object, with memory and time
+set from the size of its file. Each task runs `analysis/run_post.R`, which runs
+the vignette's code in order with only its own object read from the store.
+Every other fit call is bound to a placeholder, an empty object with the stored
+fit's key and none of its contents. Because the code runs in order, the calls
+on one set run in the vignette's order within one task, while the tasks run in
+parallel. A call on a
+placeholder returns at once, with a value that most expressions can proceed
+with. For example, an `rbind()` of the `ecx()` of two sets still evaluates the
+second set's call in the second set's task. An expression that cannot
+proceed stops at the placeholder, and the render job computes the calls left
+unevaluated, records them in the store, and lists them in `post-log.tsv`.
+
+The arrangement was tested on a workstation on 2026-11-02, against `store-531`
+and `bayesnec` 2.1.3.44 at `16e666dd`, on a vignette of 68 of example8's 107
+chunks: the sections on within-concentration grouping, the plate terms and the
+herbicides with their joint refit, which use 11 of the 20 stored objects. One
+`run_post.R` task per object, run three at a time beside other work, computed
+100 calls in 229 minutes of task time; the longest task, `fit_plate`, took 46
+minutes. The tasks made from 2 to 19 distinct calls on each object. The stored
+results occupied 1.7 GB, of which 0.9 GB was five plots stored before the shim
+was changed to force the promises in a plot's environment. Stored that way, a
+plot takes 0.7 MB and the results would occupy 0.8 GB. A render of that vignette then read all 132 of its post-fit calls from the
+store, computed none, and knitted in 74 s. Two parts of it were also knitted
+with `BAYESNEC_POST_STORE=compute`, under which the shim computes every call in
+the render's own session: the first 40 chunks (four sets, 17 calls) took 59.7 minutes against
+28 s from the store, and the herbicide section (14 calls) 29.7 minutes against
+15 s. In both, the knitted markdown and every figure were byte-identical to the
+render that read the stored results. The full vignette and the cluster jobs
+have not yet been run this way.
+
+A call the store does not hold is computed and reported on standard error,
+rather than stopping the render as a missing fit does. Its result is the same
+wherever it is computed, and computing it takes minutes, where a missing fit
+would take a day.
+
+Two limits follow from the key. After a change to `bayesnec` that alters what
+an answered function returns but not the version, the render still reads the
+results stored before the change; delete `store/post/` when that happens and
+resubmit `hpc/run.post`. And because the version is part of every key, the shim reads
+stored results only under the version that computed them. `store/post/MANIFEST`
+records that version, and the shim prints a message on a mismatch when it is
+installed.
+
 ## Running it
 
 ```sh
@@ -150,7 +242,8 @@ cp hpc/local.conf.example hpc/local.conf   # gitignored; edit it
 `deploy.sh` exports `bayesnec` at the ref `hpc/local.conf` names, records the
 commit in `hpc/bayesnec.lock`, syncs both trees, copies the container if the
 cluster does not already hold the one `hpc/image.lock` records, and submits.
-`submit.sh` then chains four jobs:
+`submit.sh` then chains five jobs, and the last of them submits the post-fit
+array and the render:
 
 | job | tasks | what it does |
 |---|---|---|
@@ -158,16 +251,35 @@ cluster does not already hold the one `hpc/image.lock` records, and submits.
 | `run.units` | 189 | one equation each, on a dependency behind the gate |
 | `run.assemble` | 1 | reassembles the nine objects and writes the store |
 | `run.joint` | 1 | fits any `bnec_joint()` call from the assembled store |
+| `run.post` | 1 | plans the post-fit array from the assembled store, and submits it and the render |
+| `run.post-task` | one per stored object | the vignette's post-fit calls on one object, written to `store/post/` |
+| `run.render` | 1 | renders example8 from the store, computing and recording any post-fit call the array did not reach |
 
-The array is idempotent: a unit whose file exists is skipped, so a timed-out
-subset is recovered by resubmitting the same array.
-
-Bring the store back and point a render at it:
+`run.post` submits the array because the memory each task needs is read from
+the assembled store, which does not exist when `submit.sh` runs. It submits one
+array per memory class in `store/post/classes.txt`, and the render behind all of
+them. For a store that is already assembled, the last three run on their own:
 
 ```sh
-./hpc/fetch-store.sh
-export BAYESNEC_FIT_STORE=$PWD/store
+sbatch --export=ALL,GRP_STORE=<store> hpc/run.post
 ```
+
+The arrays are idempotent: a unit whose file exists is skipped, and a post-fit
+result already stored is read back, not recomputed, so a timed-out subset is
+recovered by resubmitting the same job.
+
+Bring the store back, with its post-fit results, and point a render at it:
+
+```sh
+GRP_STORE=<store> ./hpc/fetch-store.sh
+export BAYESNEC_FIT_STORE=$PWD/<store>
+```
+
+The render reads `<store>/post/` without further setting. With
+`BAYESNEC_POST_STORE=compute` the shim computes every post-fit call instead, and
+with `BAYESNEC_POST_STORE=off` it leaves them to `bayesnec`. Whenever `shim/fit_store.R`
+has been regenerated, copy it to `bayesnec/vignettes/fit_store.R` before the
+render.
 
 ## The container
 
@@ -193,7 +305,7 @@ this.
 
 | file | what it is |
 |---|---|
-| `R/keys.R` | the key a fit is filed under; copied verbatim into the shim |
+| `R/keys.R` | the keys a fit and a post-fit result are filed under; copied verbatim into the shim |
 | `R/vignette.R` | reading the fit calls out of the vignette, and rebuilding what they are given |
 | `R/units.R` | splitting a call into units, and running one |
 | `R/assemble.R` | putting the units back into a `bayesmanecfit` or a `bayesnecgroupfit` |
@@ -202,5 +314,7 @@ this.
 | `analysis/run_unit.R` | fit one unit |
 | `analysis/assemble_store.R` | assemble the store |
 | `analysis/run_joint.R` | fit the joint refits, after the store is assembled |
+| `analysis/plan_post.R` | one post-fit task per stored object, sized to its file; writes `store/post/tasks.csv` |
+| `analysis/run_post.R` | the vignette's post-fit calls on one stored object, written to `store/post/` |
 | `analysis/build_shim.R` | generate `shim/fit_store.R` for copying into `bayesnec` |
 | `shim/fit_store.R` | generated; belongs in `bayesnec/vignettes/` |
