@@ -47,6 +47,8 @@ assign("readRDS", function(file, ...) {
   structure(list(key = key), class = c("bayesmanecfit", "bnecfit"))
 }, envir = globalenv())
 
+# The post-fit calls would run on the markers; only the fit calls are checked.
+Sys.setenv(BAYESNEC_POST_STORE = "off")
 fit_store_install(fake)
 
 items <- vignette_exprs(mf$vignette)

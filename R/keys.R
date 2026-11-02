@@ -108,3 +108,99 @@ joint_key <- function(cl, depends_on, fn_name = fit_fun_name(cl)) {
                              depends_on = depends_on),
                         algo = "sha256"), 1L, 16L)
 }
+
+## The key a stored post-fit result is filed under.
+##
+## A post-fit call such as `summary(fit)` is identified by the key of the object
+## it is handed, a fingerprint of that object, the function, and the values of
+## its other arguments. Values rather than expressions, because a helper in the
+## vignette passes `model = m` for each `m` in turn.
+##
+## The fingerprint catches an object changed in place after the store stamped
+## it, which the key attribute alone would not. The bayesnec version is part of
+## the key, so a result stored by another version is not replayed; it is left
+## out of the seed, so the same call draws the same numbers under a new version.
+post_identity <- function(input_key, fingerprint, fn_name, args) {
+  digest::digest(list(input = input_key, fingerprint = fingerprint,
+                      fn = fn_name, args = post_args_normalise(args)),
+                 algo = "sha256")
+}
+
+post_key <- function(identity, version) {
+  substr(digest::digest(list(identity = identity, version = version),
+                        algo = "sha256"), 1L, 16L)
+}
+
+## The seed a post-fit call is evaluated under. Seven hex digits stay below
+## .Machine$integer.max.
+post_seed <- function(identity) {
+  strtoi(substr(identity, 1L, 7L), 16L)
+}
+
+## Arguments sorted by name in C collation, which does not depend on the locale.
+## Positional arguments keep their order among themselves.
+post_args_normalise <- function(args) {
+  if (!length(args)) return(list())
+  nm <- names(args)
+  if (is.null(nm)) nm <- rep("", length(args))
+  ord <- order(nm, method = "radix")
+  out <- lapply(args[ord], post_arg_value)
+  names(out) <- nm[ord]
+  out
+}
+
+## A function or formula is keyed by its text, since serialising it would
+## serialise its environment. A closure whose result depends on that
+## environment therefore keys by text alone. A fitted object is keyed by the
+## key it carries.
+post_arg_value <- function(v) {
+  if (inherits(v, "bnecfit")) {
+    k <- post_object_key(v)
+    if (is.null(k)) stop("an argument is a fitted object the store did not answer")
+    return(list(post_object_key = k))
+  }
+  if (is.function(v) || is.language(v) || inherits(v, "formula")) {
+    return(paste(deparse(v, width.cutoff = 500L), collapse = " "))
+  }
+  if (is.environment(v)) stop("an argument is an environment")
+  if (is.list(v) && !is.data.frame(v)) {
+    out <- lapply(v, post_arg_value)
+    names(out) <- names(v)
+    return(out)
+  }
+  v
+}
+
+## The key an object carries: the key of the post-fit call that returned it,
+## or else the key of the stored fit it is. NULL for anything else.
+post_object_key <- function(x) {
+  k <- attr(x, "post_store_key", exact = TRUE)
+  if (is.null(k)) k <- attr(x, "fit_store_key", exact = TRUE)
+  k
+}
+
+## The parts of a fitted object that identify it cheaply. Digesting the whole
+## object would serialise every draw.
+post_fingerprint <- function(x) {
+  pick <- c("success_models", "mod_stats", "sample_size", "w_draw_seed",
+            "w_ne", "model", "ne", "levels", "ne_type")
+  parts <- unclass(x)[intersect(pick, names(x))]
+  nested <- lapply(unclass(x), function(el) {
+    if (inherits(el, "bnecfit")) {
+      post_fingerprint(el)
+    } else if (is.list(el) && length(el) &&
+                 all(vapply(el, inherits, logical(1L), "bnecfit"))) {
+      vapply(el, post_fingerprint, character(1L))
+    }
+  })
+  nested <- Filter(Negate(is.null), nested)
+  digest::digest(list(class = class(x), names = names(x), parts = parts,
+                      nested = nested), algo = "sha256")
+}
+
+## The key of a component of a stored object, such as one level of a
+## bayesnecgroupfit, derived from the key of the object that holds it.
+post_part_key <- function(key, part, name) {
+  substr(digest::digest(list(parent = key, part = part, name = name),
+                        algo = "sha256"), 1L, 16L)
+}
